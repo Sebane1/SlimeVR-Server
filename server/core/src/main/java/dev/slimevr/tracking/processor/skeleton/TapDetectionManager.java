@@ -13,12 +13,16 @@ import solarxr_protocol.rpc.StatusData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 /**
  * Handles tap detection for reset
  */
 public class TapDetectionManager {
+	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private static final String resetSourceName = "TapDetection";
 	private static final int tapsForSetupMode = 2;
 
@@ -31,6 +35,8 @@ public class TapDetectionManager {
 	private TapDetection yawResetDetector;
 	private TapDetection fullResetDetector;
 	private TapDetection mountingResetDetector;
+	private TapDetection leftHandTapDetector;
+	private TapDetection rightHandTapDetector;
 
 	private ArrayList<TapDetection> tapDetectors;
 
@@ -38,6 +44,7 @@ public class TapDetectionManager {
 	private int yawResetTaps = 2;
 	private int fullResetTaps = 3;
 	private int mountingResetTaps = 3;
+	private int handSelectionTaps = 2;
 
 	// delay
 	private static final float NS_CONVERTER = 1.0e9f;
@@ -79,6 +86,8 @@ public class TapDetectionManager {
 		yawResetDetector = new TapDetection(skeleton, getTrackerToWatchYawReset());
 		fullResetDetector = new TapDetection(skeleton, getTrackerToWatchFullReset());
 		mountingResetDetector = new TapDetection(skeleton, getTrackerToWatchMountingReset());
+		leftHandTapDetector = new TapDetection(skeleton, getTrackerToWatchLeftHandSelection());
+		rightHandTapDetector = new TapDetection(skeleton, getTrackerToWatchRightHandSelection());
 
 		if (trackers != null) {
 			tapDetectors = new ArrayList<>();
@@ -99,6 +108,8 @@ public class TapDetectionManager {
 		yawResetDetector.enabled = config.getYawResetEnabled();
 		fullResetDetector.enabled = config.getFullResetEnabled();
 		mountingResetDetector.enabled = config.getMountingResetEnabled();
+		leftHandTapDetector.enabled = true;
+		rightHandTapDetector.enabled = true;
 		yawResetTaps = config.getYawResetTaps();
 		fullResetTaps = config.getFullResetTaps();
 		mountingResetTaps = config.getMountingResetTaps();
@@ -114,6 +125,14 @@ public class TapDetectionManager {
 				config.getNumberTrackersOverThreshold()
 			);
 		mountingResetDetector
+			.setNumberTrackersOverThreshold(
+				config.getNumberTrackersOverThreshold()
+			);
+		leftHandTapDetector
+			.setNumberTrackersOverThreshold(
+				config.getNumberTrackersOverThreshold()
+			);
+		rightHandTapDetector
 			.setNumberTrackersOverThreshold(
 				config.getNumberTrackersOverThreshold()
 			);
@@ -144,11 +163,15 @@ public class TapDetectionManager {
 			yawResetDetector.update();
 			fullResetDetector.update();
 			mountingResetDetector.update();
+			leftHandTapDetector.update();
+			rightHandTapDetector.update();
 
 			// check if any tap detectors have detected taps
 			checkYawReset();
 			checkFullReset();
 			checkMountingReset();
+			checkLeftHandTapSelection();
+			checkRightHandTapSelection();
 		}
 	}
 
@@ -233,6 +256,21 @@ public class TapDetectionManager {
 		}
 	}
 
+	private void checkLeftHandTapSelection(){
+		boolean tapped = (handSelectionTaps <= leftHandTapDetector.getTaps());
+		if(tapped){
+			leftHandTapDetector.getTracker().setLeftTapPressed(true);
+			scheduler.schedule(() ->leftHandTapDetector.getTracker().setLeftTapPressed(false), 150, TimeUnit.MILLISECONDS);
+		}
+	}
+
+	private void checkRightHandTapSelection(){
+		boolean tapped = (handSelectionTaps <= rightHandTapDetector.getTaps());
+		if(tapped){
+			leftHandTapDetector.getTracker().setRightTapPressed(true);
+			scheduler.schedule(() ->rightHandTapDetector.getTracker().setLeftTapPressed(false), 150, TimeUnit.MILLISECONDS);
+		}
+	}
 
 	// returns either the chest tracker, hip tracker, or waist tracker depending
 	// on which one is available
@@ -266,4 +304,15 @@ public class TapDetectionManager {
 		return null;
 	}
 
+	private Tracker getTrackerToWatchLeftHandSelection() {
+		if (skeleton.getLeftHandTracker() != null)
+			return skeleton.getLeftHandTracker();
+		return null;
+	}
+
+	private Tracker getTrackerToWatchRightHandSelection() {
+		if (skeleton.getRightHandTracker() != null)
+			return skeleton.getRightHandTracker();
+		return null;
+	}
 }
