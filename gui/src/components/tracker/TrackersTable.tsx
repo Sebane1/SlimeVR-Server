@@ -1,8 +1,9 @@
 import { useLocalization } from '@fluent/react';
 import classNames from 'classnames';
-import { IPv4 } from 'ip-num/IPNumber';
+import { IPv4 } from 'ip-num';
 import { MouseEventHandler, ReactNode, useMemo, useState } from 'react';
 import {
+  BodyPart,
   TrackerDataT,
   TrackerIdT,
   TrackerStatus as TrackerStatusEnum,
@@ -47,12 +48,12 @@ const displayColumns: { [k: string]: boolean } = {
   [DisplayColumn.URL]: true,
 };
 
+const isHMD = ({ tracker }: FlatDeviceTracker) =>
+  tracker.info?.isHmd || tracker.info?.bodyPart === BodyPart.HEAD;
+
 const isSlime = ({ device }: FlatDeviceTracker) =>
   device?.hardwareInfo?.manufacturer === 'SlimeVR' ||
   device?.hardwareInfo?.manufacturer === 'HID Device';
-
-const getDeviceName = ({ device }: FlatDeviceTracker) =>
-  device?.customName?.toString() || '';
 
 const getTrackerName = ({ tracker }: FlatDeviceTracker) =>
   tracker?.info?.customName?.toString() || '';
@@ -65,13 +66,13 @@ export function TrackerNameCell({ tracker }: { tracker: TrackerDataT }) {
   return (
     <div className="flex flex-row gap-2">
       <div className="flex flex-col justify-center items-center fill-background-10">
-        <BodyPartIcon bodyPart={tracker.info?.bodyPart}></BodyPartIcon>
+        <BodyPartIcon bodyPart={tracker.info?.bodyPart} />
       </div>
       <div className="flex flex-col flex-grow">
         <Typography bold whitespace="whitespace-nowrap">
           {name}
         </Typography>
-        <TrackerStatus status={tracker.status}></TrackerStatus>
+        <TrackerStatus status={tracker.status} />
       </div>
     </div>
   );
@@ -181,7 +182,7 @@ export function TrackersTable({
   // TODO: fix memo
   const filteredSortedTrackers = useMemo(() => {
     const list = filteringEnabled
-      ? flatTrackers.filter((t) => getDeviceName(t) === 'HMD' || isSlime(t))
+      ? flatTrackers.filter((t) => isHMD(t) || isSlime(t))
       : flatTrackers;
 
     if (sortingEnabled) {
@@ -258,9 +259,7 @@ export function TrackersTable({
       {column({
         id: DisplayColumn.NAME,
         label: l10n.getString('tracker-table-column-name'),
-        row: ({ tracker }) => (
-          <TrackerNameCell tracker={tracker}></TrackerNameCell>
-        ),
+        row: ({ tracker }) => <TrackerNameCell tracker={tracker} />,
       })}
 
       {column({
@@ -299,7 +298,7 @@ export function TrackersTable({
               ping={device?.hardwareStatus?.ping}
               disabled={tracker.status === TrackerStatusEnum.DISCONNECTED}
               textColor={fontColor}
-            ></TrackerWifi>
+            />
           ),
       })}
 

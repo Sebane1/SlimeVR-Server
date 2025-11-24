@@ -113,12 +113,12 @@ skeleton_bone-NONE = Geen
 skeleton_bone-HEAD = Hoofdverschuiving
 skeleton_bone-HEAD-desc =
     Dit is de afstand tussen je headset en het midden van je hoofd.
-    Om dit aan te passen, schud je je hoofd naar links en rechts alsof je 'nee' zegt, 
+    Om dit aan te passen, schud je je hoofd naar links en rechts alsof je 'nee' zegt,
     pas het aan totdat beweging van de andere trackers te verwaarlozen is.
 skeleton_bone-NECK = Neklengte
 skeleton_bone-NECK-desc =
     Dit is de afstand tussen het midden van je hoofd en de basis van je nek.
-    Om dit aan te passen, beweeg je je hoofd op en neer alsof je knikt, of kantel je je hoofd 
+    Om dit aan te passen, beweeg je je hoofd op en neer alsof je knikt, of kantel je je hoofd
     naar links en rechts. Wijzig de positie totdat beweging in andere trackers verwaarloosbaar is.
 skeleton_bone-torso_group = Romp lengte
 skeleton_bone-torso_group-desc =
@@ -128,7 +128,7 @@ skeleton_bone-torso_group-desc =
 skeleton_bone-UPPER_CHEST = Bovenborst Lengte
 skeleton_bone-UPPER_CHEST-desc =
     Dit is de afstand tussen de basis van je nek en het midden van je borst.
-    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen 
+    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen
     (zitten, bukken, liggen, enz.) totdat je virtuele ruggengraat overeenkomt met je echte.
 skeleton_bone-CHEST_OFFSET = Borstoffset
 skeleton_bone-CHEST_OFFSET-desc =
@@ -137,12 +137,12 @@ skeleton_bone-CHEST_OFFSET-desc =
 skeleton_bone-CHEST = Borstafstand
 skeleton_bone-CHEST-desc =
     Dit is de afstand van het midden van je borst tot het midden van je ruggengraat.
-    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen 
+    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen
     (zitten, bukken, liggen, enz.) totdat je virtuele ruggengraat overeenkomt met je echte.
 skeleton_bone-WAIST = Taille lengte
 skeleton_bone-WAIST-desc =
     Dit is de afstand van het midden van je ruggengraat tot je navel.
-    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen 
+    Om dit aan te passen, stel je de torso-lengte correct af en pas je deze aan in verschillende houdingen
     (zitten, bukken, liggen, enz.) totdat je virtuele ruggengraat overeenkomt met je echte.
 skeleton_bone-HIP = Heuplengte
 skeleton_bone-HIP-desc =
@@ -200,7 +200,7 @@ skeleton_bone-SHOULDERS_WIDTH-desc =
 skeleton_bone-arm_group = Armlengte
 skeleton_bone-arm_group-desc =
     Dit is de afstand van je schouders tot je polsen.
-    Om dit aan te passen, pas je de schouderafstand correct aan, stel je Handafstand Y in op 0, 
+    Om dit aan te passen, pas je de schouderafstand correct aan, stel je Handafstand Y in op 0,
     en pas je deze aan totdat je handtrackers op één lijn liggen met je polsen.
 skeleton_bone-UPPER_ARM = Bovenarmlengte
 skeleton_bone-UPPER_ARM-desc =
@@ -215,15 +215,15 @@ skeleton_bone-LOWER_ARM-desc =
 skeleton_bone-HAND_Y = Afstand hand Y
 skeleton_bone-HAND_Y-desc =
     Dit is de verticale afstand van je polsen tot het midden van je hand.
-    Om dit aan te passen voor motion capture, pas je de armlengte correct aan 
-    en pas je deze aan totdat je handtrackers verticaal uitgelijnd zijn met het midden van je handen. 
-    Wil je het aanpassen voor elleboogtracking vanaf je controllers, 
+    Om dit aan te passen voor motion capture, pas je de armlengte correct aan
+    en pas je deze aan totdat je handtrackers verticaal uitgelijnd zijn met het midden van je handen.
+    Wil je het aanpassen voor elleboogtracking vanaf je controllers,
     stel dan de armlengte in op 0 en pas je deze aan totdat je elleboogtrackers verticaal op één lijn liggen met je polsen.
 skeleton_bone-HAND_Z = Afstand hand Z
 skeleton_bone-HAND_Z-desc =
     Dit is de horizontale afstand van je polsen tot het midden van je hand.
     Als je dit wilt aanpassen voor motion capture, stel je deze in op 0.
-    Wil je het aanpassen voor elleboogtracking vanaf je controllers, stel dan de armlengte in op 0 
+    Wil je het aanpassen voor elleboogtracking vanaf je controllers, stel dan de armlengte in op 0
     en pas je deze aan totdat je elleboogtrackers horizontaal op één lijn liggen met je polsen.
 skeleton_bone-ELBOW_OFFSET = Elleboogoffset
 skeleton_bone-ELBOW_OFFSET-desc = Dit kan worden aangepast om je virtuele elleboogtrackers omhoog of omlaag te verplaatsen, zodat wordt voorkomen dat VRChat per ongeluk een elleboogtracker aan de borst koppelt.
@@ -402,7 +402,6 @@ tracker-settings-name_section-label = Trackernaam
 tracker-settings-forget = Vergeet tracker
 tracker-settings-forget-description = Verwijdert de tracker van de SlimeVR Server en voorkomt dat deze verbinding kan maken totdat de server opnieuw wordt opgestart. De configuratie van de tracker blijft behouden.
 tracker-settings-forget-label = Vergeet tracker
-tracker-settings-update-unavailable = Kan niet worden bijgewerkt (DIY)
 tracker-settings-update-low-battery = Kan niet worden bijgewerkt. Batterij lager dan 50%
 tracker-settings-update-up_to_date = Up to date.
 tracker-settings-update-blocked = Update is niet beschikbaar. Er zijn geen andere versies beschikbaar.
@@ -607,8 +606,6 @@ settings-general-fk_settings-leg_tweak-floor_clip-description =
 settings-general-fk_settings-leg_tweak-toe_snap-description = Toe-snap probeert de rotatie van uw voeten te raden als voet-trackers niet worden gebruikt.
 settings-general-fk_settings-leg_tweak-foot_plant-description = Foot-plant roteert je voeten zodat ze evenwijdig aan de grond zijn wanneer ze in contact zijn.
 settings-general-fk_settings-leg_fk = Been tracking
-settings-general-fk_settings-leg_fk-reset_mounting_feet-description = Schakel Montage Reset voor de voeten in door op je tenen te staan.
-settings-general-fk_settings-leg_fk-reset_mounting_feet = Voeten montage reset.
 settings-general-fk_settings-enforce_joint_constraints = Bewegingslimieten van het skelet
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints = Beperkingen toepassen
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints-description = Voorkomt dat gewrichten over hun limiet draaien
@@ -720,9 +717,6 @@ settings-general-interface-connected_trackers_warning-label = Waarschuwing voor 
 ## Behavior settings
 
 settings-interface-behavior = Gedrag
-settings-general-interface-dev_mode = Ontwikkelaarsmodus
-settings-general-interface-dev_mode-description = Deze modus kan nuttig zijn als je diepgaande gegevens nodig hebt of op een geavanceerd niveau wilt communiceren met aangesloten trackers.
-settings-general-interface-dev_mode-label = Ontwikkelaarsmodus
 settings-general-interface-use_tray = Minimaliseren naar systeem vak
 settings-general-interface-use_tray-description = Hiermee kun je het venster sluiten zonder de SlimeVR server te beëindigen, zodat je deze op de achtergrond kunt blijven gebruiken zonder dat de GUI in de weg zit.
 settings-general-interface-use_tray-label = Minimaliseren naar systeem vak
@@ -764,7 +758,6 @@ settings-serial-factory_reset-warning =
     Wat betekent dat Wi-Fi en kalibratie-instellingen <b>allemaal verloren gaan!</b>
 settings-serial-factory_reset-warning-ok = Ik weet wat ik doe
 settings-serial-factory_reset-warning-cancel = Annuleren
-settings-serial-get_infos = Informatie ophalen
 settings-serial-serial_select = Selecteer een seriële poort
 settings-serial-auto_dropdown_item = Automatisch
 settings-serial-get_wifi_scan = WiFi-scan uitvoeren
@@ -862,6 +855,9 @@ settings-osc-vmc-mirror_tracking = Gespiegelde tracking
 settings-osc-vmc-mirror_tracking-description = De tracking horizontaal spiegelen.
 settings-osc-vmc-mirror_tracking-label = Gespiegelde tracking
 
+## Common OSC settings
+
+
 ## Advanced settings
 
 settings-utils-advanced = Geavanceerd
@@ -877,7 +873,7 @@ settings-utils-advanced-reset-all-label = Alles resetten
 settings-utils-advanced-reset_warning =
     { $type ->
         [gui]
-            <b>Waarschuwing</b>Hiermee worden al uw GUI instellingen teruggezet naar de standaardinstellingen. 
+            <b>Waarschuwing</b>Hiermee worden al uw GUI instellingen teruggezet naar de standaardinstellingen.
             Weet u zeker dat u dit wilt doen?
         [server]
             <b>Waarschuwing</b>Hiermee worden al uw tracking instellingen teruggezet naar de standaardinstellingen.
@@ -1003,10 +999,10 @@ onboarding-connect_serial-error-modal-no_serial_device_found-desc =
 # if $amount is 0 then we say "No trackers connected"
 onboarding-connect_tracker-connected_trackers =
     { $amount ->
-        [0] Geen trackers
-        [one] 1 tracker
-       *[other] { $amount } trackers
-    } verbonden
+        [0] Geen trackers verbonden
+        [one] 1 tracker verbonden
+       *[other] { $amount } trackers verbonden
+    }
 onboarding-connect_tracker-next = Ik heb al mijn trackers verbonden
 
 ## Tracker calibration tutorial
@@ -1040,10 +1036,10 @@ onboarding-assign_trackers-description = Laten we de bevesteging van je trackers
 # $assigned (Number) - Trackers that have been assigned a body part
 # $trackers (Number) - Trackers connected to the server
 onboarding-assign_trackers-assigned =
-    { $assigned } van { $trackers ->
-        [one] 1 tracker
-       *[other] { $trackers } trackers
-    } toegewezen
+    { $trackers ->
+        [one] { $assigned } van 1 tracker toegewezen
+       *[other] { $assigned } van { $trackers } trackers toegewezen
+    }
 onboarding-assign_trackers-advanced = Geavanceerde toewijzingslocaties weergeven
 onboarding-assign_trackers-next = Ik heb alle trackers toegewezen
 onboarding-assign_trackers-mirror_view = Gespiegelde weergave
@@ -1385,68 +1381,8 @@ firmware_tool = DIY firmware-tool
 firmware_tool-description = Hiermee kan je uw DIY-trackers configureren en flashen
 firmware_tool-not_available = Oeps, de firmwaretool is momenteel niet beschikbaar. Kom later terug!
 firmware_tool-not_compatible = De firmwaretool is niet compatibel met deze versie van de server. Gelieve te updaten!
-firmware_tool-board_step = Selecteer je bord
-firmware_tool-board_step-description = Selecteer een van de onderstaande borden.
-firmware_tool-board_pins_step = Controleer de pinnen
-firmware_tool-board_pins_step-description =
-    Controleer of de geselecteerde pinnen correct zijn.
-    Als je de SlimeVR-documentatie hebt gevolgd, zouden de standaardwaarden correct moeten zijn
-firmware_tool-board_pins_step-enable_led = LED inschakelen
-firmware_tool-board_pins_step-led_pin =
-    .label = LED-pin
-    .placeholder = Voer het adres van de LED-pin in
-firmware_tool-board_pins_step-battery_type = Selecteer het batterijtype
-firmware_tool-board_pins_step-battery_type-BAT_EXTERNAL = Externe batterij
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL = Interne batterij
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL_MCP3021 = Interne MCP3021
-firmware_tool-board_pins_step-battery_type-BAT_MCP3021 = MCP3021
-firmware_tool-board_pins_step-battery_sensor_pin =
-    .label = Batterij sensor Pin
-    .placeholder = Voer het pin-adres van de batterij sensor in
-firmware_tool-board_pins_step-battery_resistor =
-    .label = Batterij Weerstand (Ohm)
-    .placeholder = Voer de waarde van de batterijweerstand in
-firmware_tool-board_pins_step-battery_shield_resistor-0 =
-    .label = Batterij Shield R1 (Ohm)
-    .placeholder = Voer de waarde in van Battery Shield R1
-firmware_tool-board_pins_step-battery_shield_resistor-1 =
-    .label = Batterij Shield R2 (Ohm)
-    .placeholder = Voer de waarde in van Battery Shield R2
-firmware_tool-add_imus_step = Declareer uw IMU's
-firmware_tool-add_imus_step-description =
-    Voeg de IMU's toe die je tracker heeft
-    Als je de SlimeVR-documentatie hebt gevolgd, zouden de standaardwaarden correct moeten zijn.
-firmware_tool-add_imus_step-imu_type-label = IMU-type
-firmware_tool-add_imus_step-imu_type-placeholder = Selecteer het type IMU
-firmware_tool-add_imus_step-imu_rotation =
-    .label = IMU-rotatie (graden)
-    .placeholder = Rotatie van de IMU
-firmware_tool-add_imus_step-scl_pin =
-    .label = SCL-pin
-    .placeholder = Pin-adres van SCL
-firmware_tool-add_imus_step-sda_pin =
-    .label = SDA-pin
-    .placeholder = Pin-adres van SDA
-firmware_tool-add_imus_step-int_pin =
-    .label = INT-pin
-    .placeholder = Pin-adres van INT
-firmware_tool-add_imus_step-optional_tracker =
-    .label = Optionele tracker
-firmware_tool-add_imus_step-show_less = Toon minder
-firmware_tool-add_imus_step-show_more = Toon meer
-firmware_tool-add_imus_step-add_more = Voeg meer IMU's toe
-firmware_tool-select_firmware_step = Selecteer de firmwareversie
-firmware_tool-select_firmware_step-description = Kies de versie van de firmware die je wilt gebruiken
-firmware_tool-select_firmware_step-show-third-party =
-    .label = Firmware van derden weergeven
 firmware_tool-flash_method_step = Flashing methode
 firmware_tool-flash_method_step-description = Kies de flashingsmethode die je wilt gebruiken
-firmware_tool-flash_method_step-ota =
-    .label = OTA
-    .description = Gebruik de draadloze methode. Je tracker zal de Wi-Fi gebruiken om de firmware bij te werken. Werkt alleen op reeds geconfigureerde trackers.
-firmware_tool-flash_method_step-serial =
-    .label = Serial
-    .description = Gebruik een USB-kabel om je tracker bij te werken.
 firmware_tool-flashbtn_step = Druk op de bootknop
 firmware_tool-flashbtn_step-description = Voordat u naar de volgende stap gaat, zijn er een paar dingen die u moet doen.
 firmware_tool-flashbtn_step-board_SLIMEVR = Zet de tracker uit, verwijder de behuizing (indien aanwezig), verbind een USB-kabel met deze computer en voer vervolgens een van de volgende stappen uit, afhankelijk van de revisie van uw SlimeVR-board:
@@ -1475,9 +1411,6 @@ firmware_tool-flashing_step-exit = Sluit
 ## firmware tool build status
 
 firmware_tool-build-CREATING_BUILD_FOLDER = De buildmap maken
-firmware_tool-build-DOWNLOADING_FIRMWARE = Firmware wordt gedownload
-firmware_tool-build-EXTRACTING_FIRMWARE = Firmware wordt uitgepakt
-firmware_tool-build-SETTING_UP_DEFINES = Configureren van de definities
 firmware_tool-build-BUILDING = Firmware wordt gebouwd
 firmware_tool-build-SAVING = De build opslaan
 firmware_tool-build-DONE = Build voltooid

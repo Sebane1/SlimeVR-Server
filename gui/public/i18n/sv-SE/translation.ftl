@@ -103,7 +103,7 @@ skeleton_bone-HEAD-desc =
 skeleton_bone-NECK = Halsens längd
 skeleton_bone-NECK-desc =
     Detta är distansen från mittpunkten av ditt huvud till din nackes bas.
-    För att justera det, skaka ditt huvud upp och ner, som om att du säger ja eller luta ditt 
+    För att justera det, skaka ditt huvud upp och ner, som om att du säger ja eller luta ditt
     huvud höger eller vänster och modifiera det tills någon rörelse i andra rörelsesensorer är obetydlig.
 skeleton_bone-torso_group = Halsens längd
 skeleton_bone-torso_group-desc =
@@ -146,7 +146,7 @@ skeleton_bone-HIPS_WIDTH-desc =
 skeleton_bone-leg_group = Benlängd
 skeleton_bone-leg_group-desc =
     Detta är distansen från dina höfter till dina fötter.
-    För att justera det, justera din Torso-längd ordentligt och modifiera 
+    För att justera det, justera din Torso-längd ordentligt och modifiera
     den tills dina virtuella fötter är på samma nivå som dina riktiga.
 skeleton_bone-UPPER_LEG = Längd på övre delen av benet
 skeleton_bone-UPPER_LEG-desc =
@@ -166,7 +166,7 @@ skeleton_bone-FOOT_SHIFT = Fotförskjutning
 skeleton_bone-FOOT_SHIFT-desc =
     Detta värde är den horisontella distansen från dina ditt knä till din fotled.
     den tar hänsyn till att dina underben går baklänges när du står rakt upp.
-    För att justera det, ställ fotens längd till 0, utför en full återställning och modifiera den tills 
+    För att justera det, ställ fotens längd till 0, utför en full återställning och modifiera den tills
     dina virtuella fötter matchar mitten av dina fotleder.
 skeleton_bone-SKELETON_OFFSET = Skelettets förskjutning
 skeleton_bone-SKELETON_OFFSET-desc =
@@ -186,7 +186,7 @@ skeleton_bone-SHOULDERS_WIDTH-desc =
 skeleton_bone-arm_group = Armlängd
 skeleton_bone-arm_group-desc =
     Detta är avståndet från dina axlar till dina handleder.
-    För att justera det, justera Avståndet mellan axlar ordentligt, ändra Handavstånd Y 
+    För att justera det, justera Avståndet mellan axlar ordentligt, ändra Handavstånd Y
     till 0 och modifiera tills dina hand-sensorer är i linje med dina handleder.
 skeleton_bone-UPPER_ARM = Längd på överarm
 skeleton_bone-UPPER_ARM-desc =
@@ -196,7 +196,7 @@ skeleton_bone-UPPER_ARM-desc =
 skeleton_bone-LOWER_ARM = Längd på underarm
 skeleton_bone-LOWER_ARM-desc =
     Detta är avståndet från dina armbågar till dina handleder.
-    För att justera det, justera Armlängd ordentligt och modifiera det 
+    För att justera det, justera Armlängd ordentligt och modifiera det
     tills dina armbågs-spårare matchar med dina riktiga armbågar.
 skeleton_bone-HAND_Y = Handavstånd Y
 skeleton_bone-HAND_Y-desc =
@@ -388,7 +388,6 @@ tracker-settings-name_section-label = Sensorns namn
 tracker-settings-forget = Glöm spårning
 tracker-settings-forget-description = Tar bort trackern från SlimeVR-servern och förhindrar den från att ansluta till den tills servern startas om. Konfigurationen av trackern kommer inte att gå förlorad.
 tracker-settings-forget-label = Glöm spårning
-tracker-settings-update-unavailable = Kan ej uppdateras (DIY)
 tracker-settings-update-low-battery = Kan ej uppdatera. Batteriet är under 50%
 tracker-settings-update-up_to_date = Uppdaterad
 tracker-settings-update-available = { $versionName } är nu tillgänlig
@@ -576,8 +575,6 @@ settings-general-fk_settings-leg_tweak-floor_clip-description = Floor-clip kan m
 settings-general-fk_settings-leg_tweak-toe_snap-description = Toe-snap försöker gissa rotationen på dina fötter om fotspårare inte används.
 settings-general-fk_settings-leg_tweak-foot_plant-description = Fotplatta roterar fötterna så att de är parallella med marken vid kontakt.
 settings-general-fk_settings-leg_fk = Spårning av ben
-settings-general-fk_settings-leg_fk-reset_mounting_feet-description = Aktivera fötterna Montering Återställning genom att gå på tå.
-settings-general-fk_settings-leg_fk-reset_mounting_feet = Fötter Montering Återställning
 settings-general-fk_settings-enforce_joint_constraints = Skelett-gränser
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints = Upprätthåll begränsningar
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints-description = Förhindra leder från att rotera förbi dess gränser
@@ -675,9 +672,6 @@ settings-general-interface-connected_trackers_warning-label = Varning för uppko
 ## Behavior settings
 
 settings-interface-behavior = Beteende
-settings-general-interface-dev_mode = Utvecklarläge
-settings-general-interface-dev_mode-description = Det här läget kan vara användbart om du behöver djupgående data eller vill interagera med anslutna trackers på en mer avancerad nivå.
-settings-general-interface-dev_mode-label = Utvecklarläge
 settings-general-interface-use_tray = Minimera till systemfältet
 settings-general-interface-use_tray-description = Låter dig stänga fönstret utan att stänga SlimeVR-servern så att du kan fortsätta använda den utan att GUI stör dig.
 settings-general-interface-use_tray-label = Minimera till systemfältet
@@ -708,7 +702,6 @@ settings-serial-factory_reset-warning =
     Det innebär att Wi-Fi- och kalibreringsinställningar <b>kommer att gå förlorade!</b>
 settings-serial-factory_reset-warning-ok = Jag vet vad jag gör
 settings-serial-factory_reset-warning-cancel = Avbryt
-settings-serial-get_infos = Få information
 settings-serial-serial_select = Välj en serieport
 settings-serial-auto_dropdown_item = Automatiskt
 settings-serial-get_wifi_scan = Hämta WiFi-skanning
@@ -740,7 +733,7 @@ settings-osc-vrchat-oscqueryEnabled = Aktivera OSCQuery
 settings-osc-vrchat-oscqueryEnabled-description =
     OSCQuery känner automatiskt av körande instanser av VRChat och skickar data till OSCQuery.
     De kan även annonsera sig själva till VRChat för att få HMD och kontrollerdata.
-    För att tillåta samling av HMD och kontrollerdata från VRChat, gå till din huvudmenys inställningar 
+    För att tillåta samling av HMD och kontrollerdata från VRChat, gå till din huvudmenys inställningar
     under "Tracking & IK" och tillåt "Allow Sending Head and Wrist VR Tracking OSC Data"
 settings-osc-vrchat-oscqueryEnabled-label = Aktivera OSCQuery
 settings-osc-vrchat-network = Nätverksportar
@@ -789,6 +782,9 @@ settings-osc-vmc-anchor_hip-label = Förankring vid höfterna
 settings-osc-vmc-mirror_tracking = Spegla spårning
 settings-osc-vmc-mirror_tracking-description = Spegla spårning horisontellt.
 settings-osc-vmc-mirror_tracking-label = Spegla spårning
+
+## Common OSC settings
+
 
 ## Advanced settings
 
@@ -928,7 +924,6 @@ onboarding-connect_tracker-next = Jag har anslutit alla mina spårare
 
 onboarding-calibration_tutorial = Handledning för IMU-kalibrering
 onboarding-calibration_tutorial-subtitle = Detta kommer att bidra till att minska spårarens drift!
-onboarding-calibration_tutorial-description = Varje gång du slår på dina trackers måste de vila en stund på en plan yta för att kalibreras. Låt oss göra samma sak genom att klicka på knappen "{ onboarding-calibration_tutorial-calibrate }", <b>rör dem inte!</b>
 onboarding-calibration_tutorial-calibrate = Jag placerade mina trackers på bordet
 onboarding-calibration_tutorial-status-waiting = Väntar på dig
 onboarding-calibration_tutorial-status-calibrating = Kalibrering
@@ -1062,7 +1057,7 @@ onboarding-choose_mounting-manual_modal-title =
     Är du säker på att du vill göra
     den automatiska monterings-kalibreringen?
 onboarding-choose_mounting-manual_modal-description =
-    <b>Den manuella monterings-kalibreringen är rekommenderad för nya användare</b>, eftersom den automatiska monterings-kalibreringen kan vara svår att få rätt första gången 
+    <b>Den manuella monterings-kalibreringen är rekommenderad för nya användare</b>, eftersom den automatiska monterings-kalibreringen kan vara svår att få rätt första gången
     och kan behöva lite träning för att få rätt.
 onboarding-choose_mounting-manual_modal-confirm = Jag är säker på vad jag gör
 onboarding-choose_mounting-manual_modal-cancel = Avbryt
@@ -1166,9 +1161,6 @@ firmware_tool-flashing_step-exit = Stäng
 ## firmware tool build status
 
 firmware_tool-build-CREATING_BUILD_FOLDER = Skapar bygges-filen
-firmware_tool-build-DOWNLOADING_FIRMWARE = Laddar ner mjukvaran
-firmware_tool-build-EXTRACTING_FIRMWARE = Extraherar mjukvaran
-firmware_tool-build-SETTING_UP_DEFINES = Konfigurerar definitionerna.
 firmware_tool-build-BUILDING = Bygger mjukvaran.
 firmware_tool-build-SAVING = Sparar bygget.
 firmware_tool-build-DONE = Byggning färdig

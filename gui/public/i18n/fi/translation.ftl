@@ -48,6 +48,9 @@ body_part-LEFT_UPPER_LEG = Vasen reisi
 body_part-LEFT_LOWER_LEG = Vasen nilkka
 body_part-LEFT_FOOT = Vasen jalkaterä
 
+## BoardType
+
+
 ## Proportions
 
 skeleton_bone-NONE = Ei mikään
@@ -142,7 +145,6 @@ widget-developer_mode-more_info = Lisätietoja
 widget-imu_visualizer = Kierto
 widget-imu_visualizer-rotation_raw = Käsittelemätön
 widget-imu_visualizer-rotation_preview = Esikatselu
-widget-imu_visualizer-rotation_hide = Piilota
 
 ## Widget: Skeleton Visualizer
 
@@ -361,8 +363,6 @@ settings-general-fk_settings-leg_tweak-floor_clip-description = Floor clip voi v
 settings-general-fk_settings-leg_tweak-toe_snap-description = Toe snap yrittää arvata varpaiden asennon jos jalkaterän jäljitintä ei ole käytössä.
 settings-general-fk_settings-leg_tweak-foot_plant-description = Foot plant asettaa jalkateräsi yhdensuuntaisesti maan kanssa kosketuksessa.
 settings-general-fk_settings-leg_fk = Jalkojen jäljitys
-settings-general-fk_settings-leg_fk-reset_mounting_feet-description = Ota käyttöön jalkojen asennuksen nollaus varpaillaan.
-settings-general-fk_settings-leg_fk-reset_mounting_feet = Jalkojen asennuksen nollaus
 settings-general-fk_settings-arm_fk = Käsivarsien jäljitys
 settings-general-fk_settings-arm_fk-description = Muuta tapaa, jolla käsivarsia jäljitetään.
 settings-general-fk_settings-arm_fk-force_arms = Pakota kädet HMD:ltä
@@ -388,9 +388,6 @@ settings-general-fk_settings-skeleton_settings-interp_hip_legs = Keskimääritä
 settings-general-fk_settings-skeleton_settings-interp_knee_tracker_ankle = Keskimääritä polvijäljittimen kallistus nilkoilla'
 settings-general-fk_settings-self_localization-title = Mocap-tila
 settings-general-fk_settings-self_localization-description = Mocap-tila sallii luurangon karkeasti seurata omaa sijaintiaan ilman laseja tai muita jäljittimiä. Huomioi, että tämä vaatii jalka- ja pääjäljittimien toimimista ja on vielä kokeellinen.
-settings-general-fk_settings-vive_emulation-title = Vive-emulointi
-settings-general-fk_settings-vive_emulation-description = Emuloi vyötäröjäljittimen ongelmia, joita Vive jäljittimillä on. Tämä on vitsi ja pahentaa jäljitystä.
-settings-general-fk_settings-vive_emulation-label = Ota Vive-emulointi käyttöön
 
 ## Gesture control settings (tracker tapping)
 
@@ -455,6 +452,9 @@ settings-general-interface-feedback_sound-label = Palaute ääni
 settings-general-interface-feedback_sound-volume = Palaute äänen voimakkuus
 settings-general-interface-connected_trackers_warning = Yhdistettyjen jäljittimien varoitus
 settings-general-interface-connected_trackers_warning-description = Tämä vaihtoehto näyttää ponnahdusikkunan aina, kun yrität poistua SlimeVR:stä, kun sinulla on yksi tai useampi yhdistetty jäljitin. Se muistuttaa sinua sammuttamaan jäljittimet, kun olet valmis, akun käyttöiän säästämiseksi.
+
+## Behavior settings
+
 settings-general-interface-use_tray = Pienennä ilmaisinalueelle
 settings-general-interface-use_tray-description = Voit sulkea ikkunan sulkematta SlimeVR-palvelinta, jotta voit jatkaa sen käyttöä ilman, että graafinen käyttöliittymä häiritsee sinua.
 settings-general-interface-use_tray-label = Pienennä ilmaisinalueelle
@@ -479,7 +479,6 @@ settings-serial-factory_reset-warning =
     Tämä tarkoittaa, että Wi-Fi- ja kalibrointiasetukset <b>menetetään kokonaan!</b>
 settings-serial-factory_reset-warning-ok = Tiedän mitä teen
 settings-serial-factory_reset-warning-cancel = Peruuta
-settings-serial-get_infos = Hanki tietoja
 settings-serial-serial_select = Valitse sarjaportti
 settings-serial-auto_dropdown_item = Autom.
 settings-serial-file_type = Teksti
@@ -558,16 +557,16 @@ settings-osc-vmc-network-address-description = Määritä osoite, johon tietoja 
 settings-osc-vmc-network-address-placeholder = IPV4-osoite
 settings-osc-vmc-vrm = VRM-malli
 settings-osc-vmc-vrm-description = Lataa VRM-malli salliaksesi pääankkurin ja mahdollistaaksesi paremman yhteensopivuuden muiden sovellusten kanssa
-settings-osc-vmc-vrm-model_unloaded = Mallia ei ole ladattu
-settings-osc-vmc-vrm-model_loaded =
-    { $titled ->
-        [true] Malli ladattu: { $name }
-       *[other] Nimetön malli ladattu
-    }
 settings-osc-vmc-vrm-file_select = Vedä ja pudota mallia käytettäväksi tai <u>selaa</u>
 settings-osc-vmc-anchor_hip = Ankkuri lantiolla
 settings-osc-vmc-anchor_hip-description = Ankkuroi jäljitin lonkalle, hyödyllinen istuvaan VTubing. Jos poistat käytöstä, lataa VRM-malli.
 settings-osc-vmc-anchor_hip-label = Ankkuroi lonkalle
+
+## Common OSC settings
+
+
+## Advanced settings
+
 
 ## Setup/onboarding menu
 
@@ -672,7 +671,6 @@ onboarding-connect_tracker-next = Yhdistin kaikki jäljittimeni
 
 onboarding-calibration_tutorial = IMU-kalibrointi tutoriaali
 onboarding-calibration_tutorial-subtitle = Tämä auttaa vähentämään jäljittimen ajautumaa!
-onboarding-calibration_tutorial-description = Joka kerta, kun käynnistät jäljittimet, niiden täytyy levätä hetken tasaisella alustalla kalibroidakseen. Tehdään sama asia painamalla "{ onboarding-calibration_tutorial-calibrate }" nappia, <b>älä liikuta niitä!</b>
 onboarding-calibration_tutorial-calibrate = Asetin jäljittimeni pöydälle
 onboarding-calibration_tutorial-status-waiting = Odotetaan sinua
 onboarding-calibration_tutorial-status-calibrating = Kalibroi
@@ -812,26 +810,13 @@ onboarding-automatic_mounting-mounting_reset-title = Asennuksen Nollaus
 onboarding-automatic_mounting-mounting_reset-step-0 = 1. Kyykisty "hiihtoasentoon" siten, että jalat ovat koukussa, ylävartalo kallistettuna eteenpäin ja kädet koukussa.
 onboarding-automatic_mounting-mounting_reset-step-1 = 2. Paina "Nollaa Asennus" -painiketta ja odota 3 sekuntia, ennen kuin jäljittimien asennuskierrot nollautuvat.
 onboarding-automatic_mounting-preparation-title = Valmistelu
-onboarding-automatic_mounting-preparation-step-0 = 1. Seiso pystyssä kädet sivuilla.
-onboarding-automatic_mounting-preparation-step-1 = 2. Paina "Täysinollaus" -painiketta ja odota 3 sekuntia, ennen kuin jäljittimet nollautuvat.
 onboarding-automatic_mounting-put_trackers_on-title = Laita jäljittimet päällesi
 onboarding-automatic_mounting-put_trackers_on-description = Kalibroidaksemme asennuskierrokset käytämme juuri määrittämiäsi jäljittimiä. Laita kaikki jäljittimet päällesi, näet mitkä ovat mitäkin oikealla olevassa kuvassa.
 onboarding-automatic_mounting-put_trackers_on-next = Minulla on kaikki jäljittimet päällä
 
-## Tracker proportions method choose
-
-onboarding-choose_proportions = Mitä kalibrointimenetelmää käytetään?
-onboarding-choose_proportions-auto_proportions = Automaattiset mittasuhteet
-onboarding-choose_proportions-manual_proportions = Manuaaliset mittasuhteet
-onboarding-choose_proportions-import-failed = Epäonnistui
-onboarding-choose_proportions-file_type = Kehon mittasuhteet -tiedosto
-
-## Tracker manual proportions setup
+## Tracker manual proportions setupa
 
 onboarding-manual_proportions-title = Manuaaliset kehon mittasuhteet
-onboarding-manual_proportions-precision = Tarkka säätö
-onboarding-manual_proportions-auto = Automaattiset mittasuhteet
-onboarding-manual_proportions-ratio = Säädä suhderyhmien mukaan
 
 ## Tracker automatic proportions setup
 
@@ -842,17 +827,8 @@ onboarding-automatic_proportions-put_trackers_on-title = Laita jäljittimet pä�
 onboarding-automatic_proportions-put_trackers_on-next = Minulla on kaikki jäljittimet päällä
 onboarding-automatic_proportions-requirements-title = Vaatimukset
 onboarding-automatic_proportions-requirements-next = Olen lukenut vaatimukset
-onboarding-automatic_proportions-check_height-title = Tarkista pituutesi
-onboarding-automatic_proportions-check_height-description = Käytämme pituuttasi mittaustemme perustana käyttämällä HMD:n pituutta likiarvona todellisesta pituudestasi, mutta on parempi tarkistaa itse, ovatko ne oikein!
-# All the text is in bold!
-onboarding-automatic_proportions-check_height-calculation_warning = Paina painiketta <u>pystyasennossa</u> laskeaksesi pituutesi. Sinulla on 3 sekuntia painikkeen painamisen jälkeen!
-onboarding-automatic_proportions-check_height-fetch_height = Seison
 # Context is that the height is unknown
 onboarding-automatic_proportions-check_height-unknown = Tuntematon
-# Shows an element below it
-onboarding-automatic_proportions-check_height-hmd_height1 = HMD-korkeus on
-# Shows an element below it
-onboarding-automatic_proportions-check_height-height1 = Joten todellinen pituutesi on
 onboarding-automatic_proportions-check_height-next_step = Ne ovat hyvät
 onboarding-automatic_proportions-start_recording-title = Valmistaudu liikkumaan
 onboarding-automatic_proportions-start_recording-description = Aiomme nyt tallentaa joitain tiettyä asentoja ja liikkeitä. Näitä kysytään seuraavassa näytössä. Ole valmis aloittamaan, kun painat nappia!
@@ -875,10 +851,16 @@ onboarding-automatic_proportions-verify_results-redo = Tee tallennus uudelleen
 onboarding-automatic_proportions-verify_results-confirm = Nämä ovat oikein
 onboarding-automatic_proportions-done-title = Keho mitattu ja tallennettu.
 onboarding-automatic_proportions-done-description = Kehosi mittasuhteiden kalibrointi on valmis!
-onboarding-automatic_proportions-error_modal =
-    <b>Varoitus:</b> Mittasuhteita arvioitaessa havaittiin virhe!
-     <docs>Tarkista dokumentit</docs> tai liity <discord>Discordiin</discord> saadaksesi apua ^_^
 onboarding-automatic_proportions-error_modal-confirm = Ymmäretty!
+
+## Tracker scaled proportions setup
+
+
+## Tracker scaled proportions reset
+
+
+## Stay Aligned setup
+
 
 ## Home
 
@@ -903,6 +885,21 @@ status_system-StatusSteamVRDisconnected =
     }
 status_system-StatusTrackerError = { $trackerName } jäljittimessä on virhe
 
+## Firmware tool globals
+
+
+## Firmware tool Steps
+
+
+## firmware tool build status
+
+
+## Firmware update status
+
+
+## Dedicated Firmware Update Page
+
+
 ## Tray Menu
 
 
@@ -910,4 +907,7 @@ status_system-StatusTrackerError = { $trackerName } jäljittimessä on virhe
 
 
 ## Unknown device modal
+
+
+## Error collection consent modal
 

@@ -394,9 +394,6 @@ settings-general-interface-serial_detection-label = Seriell enhets gjenkjenning
 
 ## Behavior settings
 
-settings-general-interface-dev_mode = Utvikler modus
-settings-general-interface-dev_mode-description = Denne modusen kan være hjelpsom dersom du trenger data som gir mer innsyn eller for å samhandle med tilkoblede sporere på et mer avansert nivå.
-settings-general-interface-dev_mode-label = Utvikler modus
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Samtykker du til innsamling av anonymiserte feildata?</h1>
     
@@ -422,7 +419,6 @@ settings-serial-factory_reset-warning =
     Som betyr at Wi-Fi og kalibrerings innstillingene dine </b>vil bli tapt!</b>
 settings-serial-factory_reset-warning-ok = Jeg vet hva jeg driver med
 settings-serial-factory_reset-warning-cancel = Avslutt
-settings-serial-get_infos = Få info
 settings-serial-serial_select = Velg en serieport
 settings-serial-auto_dropdown_item = Auto
 
@@ -475,6 +471,9 @@ settings-osc-vrchat-network-trackers-feet = Føtter
 settings-osc-vrchat-network-trackers-elbows = Albuer
 
 ## VMC OSC settings
+
+
+## Common OSC settings
 
 
 ## Advanced settings

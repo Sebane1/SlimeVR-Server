@@ -147,7 +147,7 @@ skeleton_bone-WAIST-desc =
 skeleton_bone-HIP = Длина таза
 skeleton_bone-HIP-desc =
     Это расстояние от вашего пупка до ваших бедер.
-    Чтобы откалибровать его,  убедитесь, что "Длина туловища" задана верно, и изменяйте значение в различных 
+    Чтобы откалибровать его,  убедитесь, что "Длина туловища" задана верно, и изменяйте значение в различных
     позициях (сидя, наклонившись, лёжа и т.д.), пока ваш виртуальный позвоночник не совпадет с реальным.
 skeleton_bone-HIP_OFFSET = Смещение таза
 skeleton_bone-HIP_OFFSET-desc =
@@ -161,7 +161,7 @@ skeleton_bone-HIPS_WIDTH-desc =
 skeleton_bone-leg_group = Длина ноги
 skeleton_bone-leg_group-desc =
     Это расстояние от ваших бёдер до ваших ступней.
-    Чтобы откалибровать его, убедитесь, что "Длина туловища" задана верно, 
+    Чтобы откалибровать его, убедитесь, что "Длина туловища" задана верно,
     и изменяйте значение, пока ваши виртуальные ступни не совпадут с реальными.
 skeleton_bone-UPPER_LEG = Длина бедра
 skeleton_bone-UPPER_LEG-desc =
@@ -182,7 +182,7 @@ skeleton_bone-FOOT_SHIFT = Смещение стопы
 skeleton_bone-FOOT_SHIFT-desc =
     Это горизонтальное расстояние от ваших колен до ваших лодыжек.
     Оно отвечает за смещение голеней назад, когда вы стоите прямо.
-    Чтобы откалибровать его, установите "Длину ноги" равной 0, выполните полный сброс, и 
+    Чтобы откалибровать его, установите "Длину ноги" равной 0, выполните полный сброс, и
     изменяйте значение, пока ваши виртуальные ступни не сравняются с центром лодыжек.
 skeleton_bone-SKELETON_OFFSET = Смещение скелета
 skeleton_bone-SKELETON_OFFSET-desc =
@@ -402,7 +402,6 @@ tracker-settings-name_section-label = Имя трекера
 tracker-settings-forget = Забыть трекер
 tracker-settings-forget-description = Убирает трекер с SlimeVR Сервер и запрещает ему подключаться к серверу до того как он будет перезапущен. Конфигурация трекера не будет потеряна.
 tracker-settings-forget-label = Забыть трекер
-tracker-settings-update-unavailable = Невозможно обновить (DIY)
 tracker-settings-update-low-battery = Невозможно обновить. Заряд батареи менее 50%
 tracker-settings-update-up_to_date = Обновлено
 tracker-settings-update-available = { $versionName } теперь доступна
@@ -607,8 +606,6 @@ settings-general-fk_settings-leg_tweak-floor_clip-description = Привязка
 settings-general-fk_settings-leg_tweak-toe_snap-description = Toe-snap пытается угадать вращение ваших ступней, если трекеры для них не используются.
 settings-general-fk_settings-leg_tweak-foot_plant-description = Foot-Plant поворачивает ваши ступни так, чтобы они были параллельны земле при контакте.
 settings-general-fk_settings-leg_fk = Отслеживание ног
-settings-general-fk_settings-leg_fk-reset_mounting_feet-description = Включение сброса крепления ног при стоянии на цыпочках.
-settings-general-fk_settings-leg_fk-reset_mounting_feet = Сброс крепления ступней
 settings-general-fk_settings-enforce_joint_constraints = Ограничения Скелета
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints = Применять ограничения
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints-description = Предотвращает вращение суставов за пределы их возможностей
@@ -724,9 +721,6 @@ settings-general-interface-connected_trackers_warning-label = Предупреж
 ## Behavior settings
 
 settings-interface-behavior = Поведение
-settings-general-interface-dev_mode = Режим разработчика
-settings-general-interface-dev_mode-description = Этот режим может быть полезен, если вам нужны подробные данные или для взаимодействия с подключенными трекерами на более продвинутом уровне.
-settings-general-interface-dev_mode-label = Режим разработчика
 settings-general-interface-use_tray = Свернуть в системный трей
 settings-general-interface-use_tray-description = Позволяет закрыть окно, не закрывая сервер SlimeVR, так что вы можете продолжать использовать его, не беспокоясь о графическом интерфейсе.
 settings-general-interface-use_tray-label = Свернуть в системный трей
@@ -764,7 +758,6 @@ settings-serial-factory_reset-warning =
     Это означает, что Wi-Fi и настройки калибровки <b>будут потеряны!</b>
 settings-serial-factory_reset-warning-ok = Я знаю, что я делаю
 settings-serial-factory_reset-warning-cancel = Отмена
-settings-serial-get_infos = Получить информацию
 settings-serial-serial_select = Выбрать серийный порт
 settings-serial-auto_dropdown_item = Авто
 settings-serial-get_wifi_scan = Получить сканирование Wi-Fi
@@ -867,6 +860,9 @@ settings-osc-vmc-anchor_hip-label = Привязать к бедрам
 settings-osc-vmc-mirror_tracking = Отзеркалить отслеживание
 settings-osc-vmc-mirror_tracking-description = Отзеркалить отслеживание горизонтально.
 settings-osc-vmc-mirror_tracking-label = Отзеркалить отслеживание
+
+## Common OSC settings
+
 
 ## Advanced settings
 
@@ -1021,7 +1017,6 @@ onboarding-connect_tracker-next = Я подключил все трекеры
 
 onboarding-calibration_tutorial = Пособие по калибровке IMU
 onboarding-calibration_tutorial-subtitle = Это поможет уменьшить дрейф трекера!
-onboarding-calibration_tutorial-description = Каждый раз, когда вы включаете трекеры, они должны на мгновение отдохнуть на плоской поверхности для калибровки. Давайте сделаем то же самое, нажав кнопку «{ onboarding-calibration_tutorial-calibrate }», <b>не перемещайте их!</b>
 onboarding-calibration_tutorial-calibrate = Я положил свои трекеры на стол
 onboarding-calibration_tutorial-status-waiting = Ждем вас
 onboarding-calibration_tutorial-status-calibrating = Калибровка
@@ -1342,13 +1337,10 @@ onboarding-stay_aligned-preparation-title = Подготовка
 onboarding-stay_aligned-preparation-tip = Убедитесь, что стоите прямо. Вам необходимо смотреть вперед, а ваши руки должны быть опущены по бокам.
 onboarding-stay_aligned-relaxed_poses-standing-title = Расслабленная поза (стоя)
 onboarding-stay_aligned-relaxed_poses-standing-step-0 = 1. Встаньте в удобное положение. Расслабьтесь!
-onboarding-stay_aligned-relaxed_poses-standing-step-2 = 3. Нажмите кнопку: "Сохранить позу".
 onboarding-stay_aligned-relaxed_poses-sitting-title = Расслабленная поза (сидя на стуле)
 onboarding-stay_aligned-relaxed_poses-sitting-step-0 = 1. Сядьте в удобное положение. Расслабьтесь!
-onboarding-stay_aligned-relaxed_poses-sitting-step-2 = 3. Нажмите кнопку: "Сохранить позу".
 onboarding-stay_aligned-relaxed_poses-flat-title = Расслабленная поза (сидя на полу)
 onboarding-stay_aligned-relaxed_poses-flat-step-0 = 1. Сядьте на пол, расположив ноги перед собой. Расслабьтесь!
-onboarding-stay_aligned-relaxed_poses-flat-step-2 = 3. Нажмите кнопку: "Сохранить позу".
 onboarding-stay_aligned-relaxed_poses-skip_step = Пропустить
 onboarding-stay_aligned-done-title = Функция "Оставаться выровненным" включена!
 onboarding-stay_aligned-done-description = Настройка функции "Оставаться выровненным" завершена!
@@ -1397,68 +1389,8 @@ firmware_tool = Инструмент Прошивки DIY
 firmware_tool-description = Позволяет вам настроить и прошить ваши DIY трекеры
 firmware_tool-not_available = Упс! В данный момент инструмент прошивки недоступен. Возвращайтесь позже!
 firmware_tool-not_compatible = Средство прошивки несовместимо с этой версией сервера. Пожалуйста, обновите свой сервер!
-firmware_tool-board_step = Выберите вашу плату
-firmware_tool-board_step-description = Выберите одну из перечисленных ниже плат
-firmware_tool-board_pins_step = Проверьте контакты
-firmware_tool-board_pins_step-description =
-    Пожалуйста, проверьте правильность выбранных контактов.
-    Если вы следовали документации SlimeVR, значения по умолчанию должны быть корректными
-firmware_tool-board_pins_step-enable_led = Включить светодиод
-firmware_tool-board_pins_step-led_pin =
-    .label = Контакт светодиода
-    .placeholder = Введите адрес контакта светодиода
-firmware_tool-board_pins_step-battery_type = Выберите тип аккумуляторной батареи
-firmware_tool-board_pins_step-battery_type-BAT_EXTERNAL = Внешняя АКБ
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL = Внутренняя АКБ
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL_MCP3021 = Внутренний MCP3021
-firmware_tool-board_pins_step-battery_type-BAT_MCP3021 = MCP3021
-firmware_tool-board_pins_step-battery_sensor_pin =
-    .label = Контакт датчика АКБ
-    .placeholder = Введите адрес контакта датчика АКБ
-firmware_tool-board_pins_step-battery_resistor =
-    .label = Резистор АКБ (Ом)
-    .placeholder = Введите величину резистора АКБ
-firmware_tool-board_pins_step-battery_shield_resistor-0 =
-    .label = Battery Shield R1 (Ом)
-    .placeholder = Введите значение R1 Battery Shield
-firmware_tool-board_pins_step-battery_shield_resistor-1 =
-    .label = Battery Shield R2 (Ом)
-    .placeholder = Введите значение R2 Battery Shield
-firmware_tool-add_imus_step = Укажите ваши IMU
-firmware_tool-add_imus_step-description =
-    Пожалуйста, добавьте IMU, которые установлены на вашем трекере
-    Если вы следовали документации SlimeVR, значения по умолчанию должны быть корректными
-firmware_tool-add_imus_step-imu_type-label = Тип IMU
-firmware_tool-add_imus_step-imu_type-placeholder = Выберите тип IMU
-firmware_tool-add_imus_step-imu_rotation =
-    .label = Поворот IMU (градусы)
-    .placeholder = Угол поворота IMU
-firmware_tool-add_imus_step-scl_pin =
-    .label = Контакт SCL
-    .placeholder = Адрес контакта SCL
-firmware_tool-add_imus_step-sda_pin =
-    .label = Контакт SDA
-    .placeholder = Адрес контакта SDA
-firmware_tool-add_imus_step-int_pin =
-    .label = Контакт INT
-    .placeholder = Адрес контакта INT
-firmware_tool-add_imus_step-optional_tracker =
-    .label = Опциональный трекер
-firmware_tool-add_imus_step-show_less = Свернуть
-firmware_tool-add_imus_step-show_more = Развернуть
-firmware_tool-add_imus_step-add_more = Добавить больше IMU
-firmware_tool-select_firmware_step = Выбрать версию прошивки
-firmware_tool-select_firmware_step-description = Пожалуйста, выберите версию прошивки, которую вы хотите использовать
-firmware_tool-select_firmware_step-show-third-party =
-    .label = Показать прошивки сторонних производителей
 firmware_tool-flash_method_step = Способ прошивки
 firmware_tool-flash_method_step-description = Пожалуйста, выберите способ прошивки, который вы хотите использовать
-firmware_tool-flash_method_step-ota =
-    .label = OTA
-    .description = Использовать метод обновления "по воздуху". Ваш трекер будет использовать Wi-Fi для обновления прошивки. Работает только с уже настроенными трекерами.
-firmware_tool-flash_method_step-serial =
-    .label = Последовательный порт
-    .description = Использовать подключение по USB кабелю для обновления вашего трекера.
 firmware_tool-flashbtn_step = Нажмите кнопку загрузки
 firmware_tool-flashbtn_step-description = Прежде чем перейти к следующему шагу, вам нужно сделать ещё несколько действий
 firmware_tool-flashbtn_step-board_SLIMEVR = Отключите трекер, извлеките его из корпуса (если он есть), подключите USB кабель к компьютеру, затем выполните одно из следующих действий в соответствии с ревизией вашей платы от SlimeVR:
@@ -1487,9 +1419,6 @@ firmware_tool-flashing_step-exit = Выйти
 ## firmware tool build status
 
 firmware_tool-build-CREATING_BUILD_FOLDER = Создание папки сборки
-firmware_tool-build-DOWNLOADING_FIRMWARE = Загрузка прошивки
-firmware_tool-build-EXTRACTING_FIRMWARE = Извлечение прошивки
-firmware_tool-build-SETTING_UP_DEFINES = Настройка определений
 firmware_tool-build-BUILDING = Сборка прошивки
 firmware_tool-build-SAVING = Сохранение сборки
 firmware_tool-build-DONE = Сборка завершена

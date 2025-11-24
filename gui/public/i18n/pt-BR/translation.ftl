@@ -281,7 +281,6 @@ tracker-settings-name_section-label = Nome do tracker
 tracker-settings-forget = Esquecer o tracker
 tracker-settings-forget-description = Remove o tracker do servidor SlimeVR e impede que ele se conecte a ele até que o servidor seja reiniciado. A configuração do tracker não será perdida.
 tracker-settings-forget-label = Esquecer o tracker
-tracker-settings-update-unavailable = Não pode ser atualizado (DIY)
 tracker-settings-update-low-battery = Não é possível atualizar. Bateria abaixo de 50%
 tracker-settings-update-up_to_date = Atualizado
 tracker-settings-update-available = { $versionName } está disponível
@@ -469,8 +468,6 @@ settings-general-fk_settings-leg_tweak-floor_clip-description = Clipping de chã
 settings-general-fk_settings-leg_tweak-toe_snap-description = Encaixar os dedos do pé, tenta adivinhar a rotação dos seus pés se os trackers dos pés não estiverem em uso.
 settings-general-fk_settings-leg_tweak-foot_plant-description = Pé plantado gira os pés para ficarem paralelos ao chão quando em contato.
 settings-general-fk_settings-leg_fk = Tracking de pernas
-settings-general-fk_settings-leg_fk-reset_mounting_feet-description = Ativar o Reset de Posição dos pés ao ficar nas pontas dos pés.
-settings-general-fk_settings-leg_fk-reset_mounting_feet = Reset de Posição dos pés
 settings-general-fk_settings-enforce_joint_constraints = Limites do esqueleto
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints = Impor limites
 settings-general-fk_settings-enforce_joint_constraints-enforce_constraints-description = Evita que as articulações rotacionem além de seu limite
@@ -583,9 +580,6 @@ settings-general-interface-connected_trackers_warning-label = Aviso de trackers 
 ## Behavior settings
 
 settings-interface-behavior = Comportamento
-settings-general-interface-dev_mode = Modo de desenvolvedor
-settings-general-interface-dev_mode-description = Este modo pode ser útil se precisar de dados específicos ou para interagir com trackers conectados a um nível mais avançado
-settings-general-interface-dev_mode-label = Modo de desenvolvedor
 settings-general-interface-use_tray = Minimizar para bandeja do sistema
 settings-general-interface-use_tray-description = Permite que você feche a janela sem fechar o servidor do SlimeVR, para que possa continuar usando-o sem que a interface gráfica o incomode.
 settings-general-interface-use_tray-label = Minimizar para a bandeja do sistema
@@ -624,7 +618,6 @@ settings-serial-factory_reset-warning =
     Que significa que as opções de Wi-Fi e calibrações <b>vão ser todos perdidos!</b>
 settings-serial-factory_reset-warning-ok = Eu sei o que estou fazendo
 settings-serial-factory_reset-warning-cancel = Cancelar
-settings-serial-get_infos = Obter informações
 settings-serial-serial_select = Selecione uma porta serial
 settings-serial-auto_dropdown_item = Auto
 settings-serial-get_wifi_scan = Obter varredura WiFi
@@ -725,6 +718,9 @@ settings-osc-vmc-anchor_hip-label = Ancorar no quadril
 settings-osc-vmc-mirror_tracking = Espelhar rastreamento
 settings-osc-vmc-mirror_tracking-description = Espelhar o rastreamento horizontalmente.
 settings-osc-vmc-mirror_tracking-label = Espelhar rastreamento
+
+## Common OSC settings
+
 
 ## Advanced settings
 
@@ -856,17 +852,16 @@ onboarding-connect_tracker-connection_status-done = Conectado ao servidor
 # if $amount is 0 then we say "No trackers connected"
 onboarding-connect_tracker-connected_trackers =
     { $amount ->
-        [0] No trackers
-        [one] 1 tracker
-       *[other] { $amount } trackers
-    } connected
+        [0] No trackers connected
+        [one] 1 tracker connected
+       *[other] { $amount } trackers connected
+    }
 onboarding-connect_tracker-next = Eu conectei todos os meus trackers
 
 ## Tracker calibration tutorial
 
 onboarding-calibration_tutorial = Tutorial de Calibração IMU.
 onboarding-calibration_tutorial-subtitle = Isso ajudará a reduzir o drift dos trackers!
-onboarding-calibration_tutorial-description = Cada vez que ligar seus trackers, eles precisam ficar parados por um momento em uma superfície plana para calibrar. Vamos fazer a mesma coisa clicando no botão "{ onboarding-calibration_tutorial-calibrate }", <b>não os mova!</b>
 onboarding-calibration_tutorial-calibrate = Eu coloquei meus trackers na mesa
 onboarding-calibration_tutorial-status-waiting = Esperando por você
 onboarding-calibration_tutorial-status-calibrating = Calibrando
@@ -893,10 +888,10 @@ onboarding-assign_trackers-description = Vamos escolher onde cada tracker vai. C
 # $assigned (Number) - Trackers that have been assigned a body part
 # $trackers (Number) - Trackers connected to the server
 onboarding-assign_trackers-assigned =
-    { $assigned } of { $trackers ->
-        [one] 1 tracker
-       *[other] { $trackers } trackers
-    } assigned
+    { $trackers ->
+        [one] { $assigned } of 1 tracker assigned
+       *[other] { $assigned } of { $trackers } trackers assigned
+    }
 onboarding-assign_trackers-advanced = Mostrar locais de atribuição avançados
 onboarding-assign_trackers-next = Atribui todos os trackers
 onboarding-assign_trackers-mirror_view = Inverter visão
@@ -1193,66 +1188,8 @@ firmware_tool = Ferramenta de Firmware DIY
 firmware_tool-description = Permite você configurar e fazer upload do firmware em seu tracker DIY
 firmware_tool-not_available = Oops, a ferramenta de firmware não está disponível no momento. Volte novamente mais tarde!
 firmware_tool-not_compatible = A ferramenta de firmware não é compativel com essa versão do servidor. Por favor, atualize o seu servidor!
-firmware_tool-board_step = Selecione sua placa
-firmware_tool-board_step-description = Selecione uma das placas listadas abaixo
-firmware_tool-board_pins_step = Verifique os pinos
-firmware_tool-board_pins_step-description =
-    Verifique se os pinos selecionados estão corretos.
-    Se você seguiu a documentação do SlimeVR, os valores pré-definidos devem estar corretos
-firmware_tool-board_pins_step-enable_led = Ligar LED
-firmware_tool-board_pins_step-led_pin =
-    .label = Pino do LED
-    .placeholder = Digite o endereço do pino do LED
-firmware_tool-board_pins_step-battery_type = Selecione o tipo de bateria
-firmware_tool-board_pins_step-battery_type-BAT_EXTERNAL = Bateria externa
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL = Bateria Interna
-firmware_tool-board_pins_step-battery_type-BAT_INTERNAL_MCP3021 = MCP3021 Interna
-firmware_tool-board_pins_step-battery_type-BAT_MCP3021 = MCP3021
-firmware_tool-board_pins_step-battery_sensor_pin =
-    .label = Pino do sensor da bateria
-    .placeholder = Digite o endereço do pino do sensor da bateria
-firmware_tool-board_pins_step-battery_resistor =
-    .label = Resistor da bateria (Ohms)
-    .placeholder = Digite o valor do resistor da bateria
-firmware_tool-board_pins_step-battery_shield_resistor-0 =
-    .label = Proteção da bateria R1
-    .placeholder = Digite o valor da proteção da bateria R1
-firmware_tool-board_pins_step-battery_shield_resistor-1 =
-    .label = Proteção da bateria R2
-    .placeholder = Digite o valor da proteção da bateria R2
-firmware_tool-add_imus_step = Declare suas IMUs
-firmware_tool-add_imus_step-description = Se você seguiu a documentação do SlimeVR, os valores pré-definidos devem estar corretos
-firmware_tool-add_imus_step-imu_type-label = Tipo de IMU
-firmware_tool-add_imus_step-imu_type-placeholder = Selecione o tipo de IMU
-firmware_tool-add_imus_step-imu_rotation =
-    .label = Rotação da IMU (Graus)
-    .placeholder = O ângulo de rotação do IMU
-firmware_tool-add_imus_step-scl_pin =
-    .label = Pino SCL
-    .placeholder = Endereço do pino SCL
-firmware_tool-add_imus_step-sda_pin =
-    .label = Pino SDA
-    .placeholder = Endereço do Pino SDA
-firmware_tool-add_imus_step-int_pin =
-    .label = Pino INT
-    .placeholder = Endereço do pino INT
-firmware_tool-add_imus_step-optional_tracker =
-    .label = Tracker opcional
-firmware_tool-add_imus_step-show_less = Mostrar menos
-firmware_tool-add_imus_step-show_more = Mostrar mais
-firmware_tool-add_imus_step-add_more = Adicionar mais IMU's
-firmware_tool-select_firmware_step = Seleciona a versão do firmware
-firmware_tool-select_firmware_step-description = Por favor, escolha a versão do firmware deseja utilizar
-firmware_tool-select_firmware_step-show-third-party =
-    .label = Mostrar firmwares de terceiros
 firmware_tool-flash_method_step = Método de upload
 firmware_tool-flash_method_step-description = Por favor, selecione o método de upload que deseja utilizar
-firmware_tool-flash_method_step-ota =
-    .label = OTA
-    .description = Use o método "over the air". Seu tracker usará o Wi-Fi para atualizar o firmware. Apenas funciona em trackers já configurados
-firmware_tool-flash_method_step-serial =
-    .label = Serial
-    .description = Use um cabo USB para atualizar seu tracker
 firmware_tool-flashbtn_step = Pressione o botão de boot
 firmware_tool-flashbtn_step-description = Antes de ir para o próximo passo, aqui estão algumas etapas que você necessita fazer
 firmware_tool-flashbtn_step-board_SLIMEVR = Deslige o tracker, tire de case (se tiver), conecte o cabo USB nesse computador, e tente seguir os seguintes passos de acordo com a revisão de sua placa SlimeVR
@@ -1280,9 +1217,6 @@ firmware_tool-flashing_step-exit = Sair
 ## firmware tool build status
 
 firmware_tool-build-CREATING_BUILD_FOLDER = Criando a pasta de compilação
-firmware_tool-build-DOWNLOADING_FIRMWARE = Baixando o firmware
-firmware_tool-build-EXTRACTING_FIRMWARE = Extraindo o firmware
-firmware_tool-build-SETTING_UP_DEFINES = Configurando os defines
 firmware_tool-build-BUILDING = Compilando o firmware
 firmware_tool-build-SAVING = Salvando a compilação
 firmware_tool-build-DONE = Compilação concluída

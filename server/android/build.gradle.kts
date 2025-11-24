@@ -29,8 +29,10 @@ java {
 }
 
 tasks.register<Copy>("copyGuiAssets") {
+	val target = layout.projectDirectory.dir("src/main/resources/web-gui")
+	delete(target)
 	from(rootProject.layout.projectDirectory.dir("gui/dist"))
-	into(layout.projectDirectory.dir("src/main/resources/web-gui"))
+	into(target)
 	if (inputs.sourceFiles.isEmpty) {
 		throw GradleException("You need to run \"pnpm run build\" on the gui folder first!")
 	}
@@ -122,7 +124,7 @@ android {
 
 		// adds an offset of the version code as we might do apk releases in the middle of actual
 		// releases if we failed on bundling or stuff
-		val versionCodeOffset = 1
+		val versionCodeOffset = 2
 		// Defines the version number of your app.
 		versionCode = (extra["gitVersionCode"] as? Int)?.plus(versionCodeOffset) ?: 0
 
