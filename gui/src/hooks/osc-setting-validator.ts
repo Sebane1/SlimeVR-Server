@@ -8,6 +8,12 @@ export type OSCSettings = {
   address: string;
 };
 
+export type SpatialHeadphoneOSCSettings = {
+  enabled: boolean;
+  portOut: number;
+  address: string;
+};
+
 export function useOscSettingsValidator() {
   const bannedPorts = [6969, 21110];
   const { l10n } = useLocalization();
@@ -38,4 +44,28 @@ export function useOscSettingsValidator() {
   });
 
   return { oscValidator };
+}
+export function useSpatialHeadphonesOscSettingsValidator() {
+  const bannedPorts = [6969, 21110];
+  const { l10n } = useLocalization();
+
+  return object({
+    enabled: boolean().required(),
+
+    portOut: number()
+      .typeError(' ')
+      .required()
+      .notOneOf(bannedPorts, (ctx) =>
+        l10n.getString('settings-osc-common-network-port_banned_error', {
+          port: ctx.originalValue,
+        })
+      ),
+
+    address: string()
+      .required(' ')
+      .matches(
+        /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/i,
+        { message: ' ' }
+      ),
+  });
 }

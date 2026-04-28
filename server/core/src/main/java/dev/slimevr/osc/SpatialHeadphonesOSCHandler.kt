@@ -5,7 +5,7 @@ import com.illposed.osc.transport.OSCPortIn
 import com.illposed.osc.transport.OSCPortOut
 import com.jme3.math.FastMath
 import dev.slimevr.VRServer
-import dev.slimevr.config.SpatialHeadphonesOSCConfig
+import dev.slimevr.config.SpatialHeadphonesOscConfig
 import dev.slimevr.tracking.trackers.Tracker
 import dev.slimevr.tracking.trackers.TrackerPosition
 import io.eiren.util.collections.FastList
@@ -15,9 +15,9 @@ import java.io.IOException
 import java.net.InetAddress
 import java.net.InetSocketAddress
 
-class SpatialHeadphonesOSCHandler(
+class SpatialHeadphonesOscHandler(
 	private val server: VRServer,
-	private val config: SpatialHeadphonesOSCConfig,
+	private val config: SpatialHeadphonesOscConfig,
 ) : OSCHandler {
 	private var oscSender: OSCPortOut? = null
 	private var headTracker: Tracker? = null
@@ -48,7 +48,7 @@ class SpatialHeadphonesOSCHandler(
 			try {
 				oscSender!!.close()
 			} catch (e: IOException) {
-				LogManager.severe("[SpatialHeadphonesOSCHandler] Error closing the OSC sender: $e")
+				LogManager.severe("[SpatialHeadphonesOscHandler] Error closing the OSC sender: $e")
 			}
 		}
 
@@ -57,13 +57,13 @@ class SpatialHeadphonesOSCHandler(
 				val addr = InetAddress.getByName(ip)
 				oscSender = OSCPortOut(InetSocketAddress(addr, portOut))
 				if (oscPortOut != portOut && oscIp != addr || !wasConnected) {
-					LogManager.info("[SpatialHeadphonesOSCHandler] Sending to port $portOut at address $ip")
+					LogManager.info("[SpatialHeadphonesOscHandler] Sending to port $portOut at address $ip")
 				}
 				oscPortOut = portOut
 				oscIp = addr
 				oscSender?.connect()
 			} catch (e: IOException) {
-				LogManager.severe("[SpatialHeadphonesOSCHandler] Error connecting to port $portOut at the address $ip: $e")
+				LogManager.severe("[SpatialHeadphonesOscHandler] Error connecting to port $portOut at the address $ip: $e")
 			}
 		}
 	}
@@ -99,7 +99,7 @@ class SpatialHeadphonesOSCHandler(
 			val currentTime = System.currentTimeMillis()
 			if (currentTime - timeAtLastError > 1000) {
 				timeAtLastError = currentTime
-				LogManager.warning("[SpatialHeadphonesOSCHandler] Error sending OSC message: $e")
+				LogManager.warning("[SpatialHeadphonesOscHandler] Error sending OSC message: $e")
 			}
 		}
 	}

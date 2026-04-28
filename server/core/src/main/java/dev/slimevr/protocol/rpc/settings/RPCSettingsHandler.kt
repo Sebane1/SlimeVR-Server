@@ -145,20 +145,19 @@ class RPCSettingsHandler(var rpcHandler: RPCHandler, var api: ProtocolAPI) {
 		}
 
 		if (req.spatialHeadphonesOsc() != null) {
-			val spatialHeadphonesOSCConfig = api.server.configManager
+			val spatialHeadphonesOscConfig = api.server.configManager
 				.vrConfig
-				.spatialHeadphonesOSC
-			val spatialHeadphonesOSCHandler = api.server.spatialHeadphonesOSCHandler
+				.spatialHeadphonesOsc
+			val spatialHeadphonesOscHandler = api.server.spatialHeadphonesOscHandler
 			val osc = req.spatialHeadphonesOsc()
 
 			if (osc != null) {
-				spatialHeadphonesOSCConfig.enabled = osc.enabled()
-				spatialHeadphonesOSCConfig.portIn = osc.portIn()
-				spatialHeadphonesOSCConfig.portOut = osc.portOut()
-				spatialHeadphonesOSCConfig.address = osc.address()
+				spatialHeadphonesOscConfig.enabled = osc.enabled()
+				spatialHeadphonesOscConfig.portOut = osc.portOut()
+				spatialHeadphonesOscConfig.address = osc.address()
 			}
 
-			spatialHeadphonesOSCHandler.refreshSettings(true)
+			spatialHeadphonesOscHandler.refreshSettings(true)
 		}
 
 		if (req.tapDetectionSettings() != null) {

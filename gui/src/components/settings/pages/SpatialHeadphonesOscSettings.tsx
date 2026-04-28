@@ -1,12 +1,13 @@
 import { Localized, useLocalization } from '@fluent/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ChangeSettingsRequestT,
-  OSCSettingsT,
   RpcMessage,
   SettingsRequestT,
   SettingsResponseT,
+  OSCSettingsT,
+  SpatialHeadphonesOscSettingsT
 } from 'solarxr-protocol';
 import { useWebsocketAPI } from '@/hooks/websocket-api';
 import { CheckBox } from '@/components/commons/Checkbox';
@@ -21,10 +22,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { object } from 'yup';
 import {
   OSCSettings,
-  useOscSettingsValidator,
+  useSpatialHeadphonesOscSettingsValidator,
 } from '@/hooks/osc-setting-validator';
 
-interface SpatialHeadphonesOSCSettingsForm {
+interface SpatialHeadphonesOscSettingsForm {
   spatialHeadphones: {
     oscSettings: OSCSettings;
   };
@@ -34,20 +35,19 @@ const defaultValues = {
   spatialHeadphones: {
     oscSettings: {
       enabled: false,
-      portIn: 0,
       portOut: 7001,
       address: '127.0.0.1',
     },
   },
 };
 
-export function SpatialHeadphonesOSCSettings() {
+export function SpatialHeadphonesOscSettings() {
   const { l10n } = useLocalization();
   const { sendRPCPacket, useRPCPacket } = useWebsocketAPI();
-  const { oscValidator } = useOscSettingsValidator();
+  const { oscValidator } = useSpatialHeadphonesOscSettingsValidator();
 
   const { reset, control, watch, handleSubmit } =
-    useForm<SpatialHeadphonesOSCSettingsForm>({
+    useForm<SpatialHeadphonesOscSettingsForm>({
       defaultValues,
       reValidateMode: 'onChange',
       mode: 'onChange',
@@ -56,19 +56,16 @@ export function SpatialHeadphonesOSCSettings() {
           spatialHeadphones: object({
             oscSettings: oscValidator,
           }),
-        }) as any
+        }) as any,
       ),
     });
 
-  const onSubmit = (values: SpatialHeadphonesOSCSettingsForm) => {
+  const onSubmit = (values: SpatialHeadphonesOscSettingsForm) => {
     const settings = new ChangeSettingsRequestT();
 
-    if (values.spatialHeadphones) {
-      settings.spatialHeadphonesOsc = Object.assign(
-        new OSCSettingsT(),
-        values.spatialHeadphones.oscSettings
-      );
-    }
+    const osc = new SpatialHeadphonesOscSettingsT();
+    Object.assign(osc, values.spatialHeadphones.oscSettings);
+    settings.spatialHeadphonesOsc = osc;
     sendRPCPacket(RpcMessage.ChangeSettingsRequest, settings);
   };
 
@@ -82,21 +79,17 @@ export function SpatialHeadphonesOSCSettings() {
   }, []);
 
   useRPCPacket(RpcMessage.SettingsResponse, (settings: SettingsResponseT) => {
-    const formData: SpatialHeadphonesOSCSettingsForm = defaultValues;
+    const formData: SpatialHeadphonesOscSettingsForm = defaultValues;
     if (settings.spatialHeadphonesOsc) {
-      formData.spatialHeadphones.oscSettings.enabled =
+        formData.spatialHeadphones.oscSettings.enabled =
         settings.spatialHeadphonesOsc.enabled;
-      if (settings.spatialHeadphonesOsc.portIn)
-        formData.spatialHeadphones.oscSettings.portIn =
-          settings.spatialHeadphonesOsc.portIn;
-      if (settings.spatialHeadphonesOsc.portOut)
         formData.spatialHeadphones.oscSettings.portOut =
-          settings.spatialHeadphonesOsc.portOut;
-      if (settings.spatialHeadphonesOsc.address)
+        settings.spatialHeadphonesOsc.portOut;
+        if (settings.spatialHeadphonesOsc.address) {
         formData.spatialHeadphones.oscSettings.address =
-          settings.spatialHeadphonesOsc.address.toString();
+            settings.spatialHeadphonesOsc.address.toString();
+        }
     }
-
     reset(formData);
   });
 
@@ -124,7 +117,7 @@ export function SpatialHeadphonesOSCSettings() {
             <div className="flex flex-col pb-2">
               <Typography>
                 {l10n.getString(
-                  'settings-osc-spatial-headphones-enable-description'
+                  'settings-osc-spatial-headphones-enable-description',
                 )}
               </Typography>
             </div>
@@ -135,7 +128,7 @@ export function SpatialHeadphonesOSCSettings() {
                 control={control}
                 name="spatialHeadphones.oscSettings.enabled"
                 label={l10n.getString(
-                  'settings-osc-spatial-headphones-enable-label'
+                  'settings-osc-spatial-headphones-enable-label',
                 )}
               />
             </div>
@@ -146,7 +139,7 @@ export function SpatialHeadphonesOSCSettings() {
             <div className="flex flex-col pb-2">
               <Typography>
                 {l10n.getString(
-                  'settings-osc-spatial-headphones-network-description'
+                  'settings-osc-spatial-headphones-network-description',
                 )}
               </Typography>
             </div>
@@ -165,12 +158,14 @@ export function SpatialHeadphonesOSCSettings() {
               </Localized>
             </div>
             <Typography variant="section-title">
-              {l10n.getString('settings-osc-spatial-headphones-network-address')}
+              {l10n.getString(
+                'settings-osc-spatial-headphones-network-address',
+              )}
             </Typography>
             <div className="flex flex-col pb-2">
               <Typography>
                 {l10n.getString(
-                  'settings-osc-spatial-headphones-network-address-description'
+                  'settings-osc-spatial-headphones-network-address-description',
                 )}
               </Typography>
             </div>
@@ -180,7 +175,7 @@ export function SpatialHeadphonesOSCSettings() {
                 control={control}
                 name="spatialHeadphones.oscSettings.address"
                 placeholder={l10n.getString(
-                  'settings-osc-spatial-headphones-network-address-placeholder'
+                  'settings-osc-spatial-headphones-network-address-placeholder',
                 )}
                 label=""
               />
