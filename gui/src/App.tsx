@@ -52,6 +52,7 @@ import { StayAlignedSetup } from './components/onboarding/pages/stay-aligned/Sta
 import { TrackingChecklistProvider } from './components/tracking-checklist/TrackingChecklistProvider';
 import { HomeScreenSettings } from './components/settings/pages/HomeScreenSettings';
 import { ChecklistPage } from './components/tracking-checklist/TrackingChecklist';
+import { SpatialHeadphonesOSCSettings } from './components/settings/pages/SpatialHeadphonesOSCSettings';
 import { QuizSlimeSetQuestion } from './components/onboarding/pages/quiz/SlimeSetQuestion';
 import { QuizUsageQuestion } from './components/onboarding/pages/quiz/UsageQuestion';
 import { QuizRuntimeQuestion } from './components/onboarding/pages/quiz/RuntimeQuestion';
@@ -142,6 +143,10 @@ function Layout() {
             <Route path="osc/router" element={<OSCRouterSettings />} />
             <Route path="osc/vrchat" element={<VRCOSCSettings />} />
             <Route path="osc/vmc" element={<VMCSettings />} />
+            <Route
+              path="osc/spatial-headphones"
+              element={<SpatialHeadphonesOSCSettings />}
+            />
             <Route path="interface" element={<InterfaceSettings />} />
             <Route path="interface/home" element={<HomeScreenSettings />} />
             <Route path="advanced" element={<AdvancedSettings />} />

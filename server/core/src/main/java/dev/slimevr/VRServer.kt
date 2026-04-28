@@ -15,6 +15,7 @@ import dev.slimevr.osc.OSCHandler
 import dev.slimevr.osc.OSCRouter
 import dev.slimevr.osc.VMCHandler
 import dev.slimevr.osc.VRCOSCHandler
+import dev.slimevr.osc.SpatialHeadphonesOSCHandler
 import dev.slimevr.posestreamer.BVHRecorder
 import dev.slimevr.protocol.ProtocolAPI
 import dev.slimevr.protocol.rpc.TransactionInfo
@@ -76,11 +77,11 @@ class VRServer @JvmOverloads constructor(
 	private val trackerStatusListeners: MutableList<TrackerStatusListener> = FastList()
 	private val onTick: MutableList<Runnable> = FastList()
 	private val lock = acquireMulticastLock()
-	val oSCRouter: OSCRouter
 
-	@JvmField
-	val vrcOSCHandler: VRCOSCHandler
-	val vMCHandler: VMCHandler
+	lateinit var vrcOSCHandler: VRCOSCHandler
+	lateinit var vMCHandler: VMCHandler
+	lateinit var spatialHeadphonesOSCHandler: SpatialHeadphonesOSCHandler
+	lateinit var oSCRouter: OSCRouter
 
 	@JvmField
 	val deviceManager: DeviceManager
@@ -172,11 +173,16 @@ class VRServer @JvmOverloads constructor(
 			humanPoseManager,
 			configManager.vrConfig.vmc,
 		)
+		spatialHeadphonesOSCHandler = SpatialHeadphonesOSCHandler(
+			this,
+			configManager.vrConfig.spatialHeadphonesOSC,
+		)
 
 		// Initialize OSC router
 		val oscHandlers = FastList<OSCHandler>()
 		oscHandlers.add(vrcOSCHandler)
 		oscHandlers.add(vMCHandler)
+		oscHandlers.add(spatialHeadphonesOSCHandler)
 		oSCRouter = OSCRouter(configManager.vrConfig.oscRouter, oscHandlers)
 		bvhRecorder = BVHRecorder(this)
 		for (tracker in computedTrackers) {
@@ -263,6 +269,7 @@ class VRServer @JvmOverloads constructor(
 			}
 			vrcOSCHandler.update()
 			vMCHandler.update()
+			spatialHeadphonesOSCHandler.update()
 			// final long time = System.currentTimeMillis() - start;
 			try {
 				sleep(1) // 1000Hz

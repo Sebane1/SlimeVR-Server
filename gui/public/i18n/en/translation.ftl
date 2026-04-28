@@ -882,6 +882,26 @@ settings-osc-vmc-mirror_tracking = Mirror tracking
 settings-osc-vmc-mirror_tracking-description = Mirror the tracking horizontally.
 settings-osc-vmc-mirror_tracking-label = Mirror tracking
 
+## Spatial Headphones OSC settings
+settings-osc-spatial-headphones = Spatial Headphones
+settings-osc-spatial-headphones-description =
+    Configure OSC output for spatial headphone software.
+    Compatible with Neumann RIME and other software that accepts /ypr <yaw> <pitch> <roll> in degrees.
+settings-osc-spatial-headphones-enable = Enable
+settings-osc-spatial-headphones-enable-description = Toggle the sending of head tracking data to compatible spatial headphone software, including Neumann RIME.
+settings-osc-spatial-headphones-enable-label = Enable
+settings-osc-spatial-headphones-network = Network ports
+settings-osc-spatial-headphones-network-description = Set the port used to send data to compatible spatial headphone software.
+settings-osc-spatial-headphones-network-port_out =
+    .label = Port Out
+    .placeholder = Port out (default: 7001)
+settings-osc-spatial-headphones-network-address = Network address
+settings-osc-spatial-headphones-network-address-description = Choose the address of the device running compatible spatial headphone software, such as Neumann RIME.
+settings-osc-spatial-headphones-network-address-placeholder = IPV4 address
+
+## Sidebar settings
+settings-sidebar-osc_spatial_headphones = Spatial Headphones
+
 ## Common OSC settings
 settings-osc-common-network-ports_match_error = The OSC Router in and out ports can't be the same!
 settings-osc-common-network-port_banned_error = The port { $port } can't be used!

@@ -28,6 +28,8 @@ class VRConfig {
 	@get:JvmName("getVMC")
 	val vmc: VMCConfig = VMCConfig()
 
+	val spatialHeadphonesOSC: SpatialHeadphonesOSCConfig = SpatialHeadphonesOSCConfig()
+
 	val autoBone: AutoBoneConfig = AutoBoneConfig()
 
 	val keybindings: KeybindingsConfig = KeybindingsConfig()
@@ -87,6 +89,9 @@ class VRConfig {
 		// Initialize default settings for VMC
 		vmc.portIn = 39540
 		vmc.portOut = 39539
+
+		// Initialize default settings for Spatial Headphones OSC
+		spatialHeadphonesOSC.portOut = 7001
 	}
 
 	fun getTrackers(): Map<String, TrackerConfig> = trackers

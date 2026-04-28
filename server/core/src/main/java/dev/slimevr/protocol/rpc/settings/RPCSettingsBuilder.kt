@@ -11,6 +11,7 @@ import dev.slimevr.config.LegTweaksConfig
 import dev.slimevr.config.OSCConfig
 import dev.slimevr.config.ResetsConfig
 import dev.slimevr.config.SkeletonConfig
+import dev.slimevr.config.SpatialHeadphonesOSCConfig
 import dev.slimevr.config.StayAlignedConfig
 import dev.slimevr.config.TapDetectionConfig
 import dev.slimevr.config.VMCConfig
@@ -39,6 +40,24 @@ import solarxr_protocol.rpc.settings.ModelRatios
 import solarxr_protocol.rpc.settings.ModelSettings
 import solarxr_protocol.rpc.settings.ModelToggles
 import solarxr_protocol.rpc.settings.SkeletonHeight
+
+fun createSpatialHeadphonesOSCSettings(
+	fbb: FlatBufferBuilder,
+	config: SpatialHeadphonesOSCConfig,
+): Int {
+	val addressStringOffset = fbb.createString(config.address)
+
+	val oscSettingOffset = OSCSettings
+		.createOSCSettings(
+			fbb,
+			config.enabled,
+			config.portIn,
+			config.portOut,
+			addressStringOffset,
+		)
+
+	return oscSettingOffset
+}
 
 fun createOSCRouterSettings(
 	fbb: FlatBufferBuilder,
@@ -123,6 +142,7 @@ fun createVMCOSCSettings(
 
 	return VMCOSCSettings.endVMCOSCSettings(fbb)
 }
+
 
 fun createFilterSettings(
 	fbb: FlatBufferBuilder,
@@ -420,7 +440,12 @@ fun createSettingsResponse(fbb: FlatBufferBuilder, server: VRServer): Int {
 				fbb,
 				server.configManager.vrConfig.stayAlignedConfig,
 			),
+			createSpatialHeadphonesOSCSettings(
+				fbb,
+				server.configManager.vrConfig.spatialHeadphonesOSC,
+			),
 			createHIDSettings(fbb, server.configManager.vrConfig.hidConfig),
+			0,
 			0,
 		)
 }

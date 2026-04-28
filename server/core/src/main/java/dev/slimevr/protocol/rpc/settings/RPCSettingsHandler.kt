@@ -144,6 +144,23 @@ class RPCSettingsHandler(var rpcHandler: RPCHandler, var api: ProtocolAPI) {
 			vmcHandler.refreshSettings(true)
 		}
 
+		if (req.spatialHeadphonesOsc() != null) {
+			val spatialHeadphonesOSCConfig = api.server.configManager
+				.vrConfig
+				.spatialHeadphonesOSC
+			val spatialHeadphonesOSCHandler = api.server.spatialHeadphonesOSCHandler
+			val osc = req.spatialHeadphonesOsc()
+
+			if (osc != null) {
+				spatialHeadphonesOSCConfig.enabled = osc.enabled()
+				spatialHeadphonesOSCConfig.portIn = osc.portIn()
+				spatialHeadphonesOSCConfig.portOut = osc.portOut()
+				spatialHeadphonesOSCConfig.address = osc.address()
+			}
+
+			spatialHeadphonesOSCHandler.refreshSettings(true)
+		}
+
 		if (req.tapDetectionSettings() != null) {
 			val tapDetectionConfig = api.server.configManager
 				.vrConfig
@@ -377,7 +394,7 @@ class RPCSettingsHandler(var rpcHandler: RPCHandler, var api: ProtocolAPI) {
 			val settings = SettingsResponse
 				.createSettingsResponse(
 					fbb,
-					createSteamVRSettings(fbb, bridge), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+					createSteamVRSettings(fbb, bridge), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 				)
 			val outbound =
 				rpcHandler.createRPCMessage(fbb, RpcMessage.SettingsResponse, settings)

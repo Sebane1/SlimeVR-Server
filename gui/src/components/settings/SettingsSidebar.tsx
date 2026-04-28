@@ -122,6 +122,11 @@ export function SettingsSidebar() {
               scrollTo="vmc"
               id="settings-sidebar-osc_vmc"
             />
+            <SettingsLink
+              to="/settings/osc/spatial-headphones"
+              scrollTo="spatialHeadphones"
+              id="settings-sidebar-osc_spatial_headphones"
+            />
           </div>
         </div>
         <div className="flex flex-col gap-3">
