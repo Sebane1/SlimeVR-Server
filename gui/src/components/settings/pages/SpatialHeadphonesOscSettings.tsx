@@ -1,12 +1,11 @@
 import { Localized, useLocalization } from '@fluent/react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   ChangeSettingsRequestT,
   RpcMessage,
   SettingsRequestT,
   SettingsResponseT,
-  OSCSettingsT,
   SpatialHeadphonesOscSettingsT
 } from 'solarxr-protocol';
 import { useWebsocketAPI } from '@/hooks/websocket-api';
