@@ -220,7 +220,7 @@ function PluginBoneCard({
       if (found) return found;
     }
     return flatTrackers.find(
-      (td) => td.tracker.info?.bodyPosition === virtualPart
+      (td) => td.tracker.info?.bodyPart === virtualPart
     );
   }, [bone.assignedTrackerId, flatTrackers, virtualPart]);
 
