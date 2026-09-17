@@ -1,9 +1,12 @@
+import { HTMLAttributes, ReactNode, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import { useLocalization } from '@fluent/react';
 import { Clickable } from '@/components/commons/Clickable';
-import { HTMLAttributes, ReactNode, useCallback, useMemo } from 'react';
+import { useAtomValue } from 'jotai';
+import { pluginBonesAtom } from '@/store/app-store';
 import { BodyPart } from 'solarxr-protocol';
 import { MirrorLegend } from '@/components/onboarding/BodyAssignment';
+import { SpinIcon } from '@/components/commons/icon/SpinIcon';
 import {
   BodyPartAssignment,
   ExtremityGroupRenderer,
@@ -119,11 +122,14 @@ export function PickerPanel({
       <div className="flex-1 min-h-0 overflow-y-auto [scrollbar-gutter:stable] px-2 flex flex-col fill-background-50">
         <div
           className={classNames(
-            'w-full m-auto flex-1 min-h-fit flex flex-col tall:py-6',
+            'w-full flex-1 min-h-fit flex flex-col tall:py-6',
+            tab === 'plugins' ? 'mx-auto my-0' : 'm-auto',
             extremity ? 'max-w-[940px]' : 'max-w-[770px]'
           )}
         >
-          {extremity ? (
+          {tab === 'plugins' ? (
+            <PluginBonesAssignmentView />
+          ) : extremity ? (
             <BodyPartAssignment
               view={{ kind: 'extremity', descriptor: extremity }}
               side={side}
@@ -156,6 +162,191 @@ export function PickerPanel({
         </div>
       </div>
     </div>
+  );
+}
+
+function PluginBonesAssignmentView() {
+  const pluginBones = useAtomValue(pluginBonesAtom);
+
+  return (
+    <div className="flex flex-col gap-4 p-4 max-w-[940px] mx-auto my-0 w-full">
+      <div className="flex items-center justify-between pb-2 border-b border-background-60/60">
+        <Typography bold variant="section-title">
+          Plugin Target Bones
+        </Typography>
+      </div>
+      {pluginBones.length === 0 ? (
+        <div className="p-8 text-center text-status-neutral opacity-70">
+          No plugin bones registered. Loaded plugins will register their custom target bones here dynamically.
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-3">
+          {pluginBones.map((bone, index) => (
+            <div
+              key={bone.id}
+              className="gap-0.5 p-1 rounded-lg bg-background-70/40 border border-background-60"
+            >
+              <PluginBoneCard bone={bone} index={index} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PluginBoneCard({
+  bone,
+  index,
+}: {
+  bone: { id: string; name?: string; parentBoneId?: string; assignedTrackerId?: number };
+  index: number;
+}) {
+  const virtualPart = (BodyPart.HEAD + 100 + index) as BodyPart;
+  const {
+    mode,
+    armedPart,
+    pendingTrackerId,
+    selectPart,
+    handleDropTracker,
+    flatTrackers,
+  } = useAssignment();
+
+  const assignedTd = useMemo(() => {
+    if (bone.assignedTrackerId != null) {
+      const found = flatTrackers.find(
+        (td) => td.tracker.trackerId === bone.assignedTrackerId
+      );
+      if (found) return found;
+    }
+    return flatTrackers.find(
+      (td) => td.tracker.info?.bodyPosition === virtualPart
+    );
+  }, [bone.assignedTrackerId, flatTrackers, virtualPart]);
+
+  const isArmed = armedPart === virtualPart;
+  const awaitingTracker = pendingTrackerId != null;
+  const velocity = useVelocity(assignedTd?.tracker);
+  const isHovering = trackerDrag.useIsDragHovering(virtualPart);
+
+  let displayName = bone.name || bone.id;
+  let displayNumber: number | undefined = undefined;
+
+  const numberMatch = displayName.match(/^(.*?)\s*(\d+)$/);
+  if (numberMatch) {
+    displayName = numberMatch[1];
+    displayNumber = parseInt(numberMatch[2], 10);
+  }
+
+  if (mode === 'drag') {
+    const isTargeting =
+      trackerDrag.useIsDragActive() || pendingTrackerId !== null;
+    const { dragProps, tapProps, isDragging } = trackerDrag.useDraggable(
+      assignedTd
+        ? {
+            trackerId: assignedTd.tracker.trackerId,
+            label: getTrackerName(assignedTd.tracker.info),
+          }
+        : null,
+      (bodyPart) => {
+        if (assignedTd)
+          handleDropTracker(
+            assignedTd.tracker.trackerId,
+            bodyPart ?? BodyPart.NONE
+          );
+      },
+      () => selectPart(virtualPart, bone.name || bone.id)
+    );
+
+    return (
+      <div
+        {...bodyPartDropProps(virtualPart)}
+        {...dragProps}
+        {...tapProps}
+        id={bone.id}
+        aria-pressed={isArmed}
+        className={classNames(
+          'flex flex-col control rounded-md relative touch-none select-none',
+          'transition-colors duration-150 ease-linear text-left',
+          'gap-0.5 w-full min-w-[120px] max-w-[160px] px-2 py-1.5',
+          assignedTd ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer',
+          isDragging && 'opacity-40',
+          isHovering
+            ? 'bg-background-50'
+            : isArmed
+              ? 'bg-accent-background-30/40'
+              : isTargeting
+                ? 'bg-background-50/50'
+                : 'hover:bg-background-50'
+        )}
+      >
+        <div className="flex items-center justify-between w-full gap-1 min-w-0">
+          <Typography variant="standard" bold truncate>
+            {displayName}
+          </Typography>
+          {displayNumber !== undefined && (
+            <span className="shrink-0 w-4 h-4 rounded-full bg-background-10 text-background-90 text-[10px] font-bold flex items-center justify-center">
+              {displayNumber}
+            </span>
+          )}
+        </div>
+        {assignedTd ? (
+          <AssignedTrackerLabel tracker={assignedTd} compact />
+        ) : (
+          <Typography
+            variant="standard"
+            truncate
+            color="text-background-30"
+          >
+            Unassigned
+          </Typography>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <Clickable
+      id={bone.id}
+      onClick={() => selectPart(virtualPart, bone.name || bone.id)}
+      style={velocityGlowStyle(velocity)}
+      className={classNames(
+        'flex flex-col control rounded-md relative overflow-hidden transition-colors duration-150 ease-linear text-left',
+        'gap-0.5 w-full min-w-[120px] max-w-[160px] px-2 py-1.5',
+        isArmed
+          ? 'bg-accent-background-30/40'
+          : awaitingTracker
+            ? 'bg-background-60/60'
+            : 'hover:bg-background-60/40'
+      )}
+    >
+      {awaitingTracker && !isArmed && !assignedTd && (
+        <div className="absolute inset-0 rounded-md border border-accent-background-20/70 animate-pulse pointer-events-none" />
+      )}
+      <div className="flex items-center justify-between w-full gap-1 min-w-0">
+        <Typography variant="standard" bold truncate>
+          {displayName}
+        </Typography>
+        {displayNumber !== undefined && (
+          <span className="shrink-0 w-4 h-4 rounded-full bg-background-10 text-background-90 text-[10px] font-bold flex items-center justify-center">
+            {displayNumber}
+          </span>
+        )}
+      </div>
+      {assignedTd ? (
+        <Typography variant="standard" truncate>
+          {getTrackerName(assignedTd.tracker.info)}
+        </Typography>
+      ) : (
+        <Typography
+          variant="standard"
+          truncate
+          color="text-background-30"
+        >
+          Unassigned
+        </Typography>
+      )}
+    </Clickable>
   );
 }
 

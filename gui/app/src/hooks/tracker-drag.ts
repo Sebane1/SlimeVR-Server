@@ -10,10 +10,12 @@ export interface TrackerDragPayload {
 
 export const trackerDrag = createPointerDrag<TrackerDragPayload, BodyPart>({
   attribute: 'data-drop-body-part',
-  serialize: (part) => BodyPart[part],
+  serialize: (part) => BodyPart[part] ?? String(part),
   parse: (raw) => {
     const part = (BodyPart as unknown as Record<string, number>)[raw];
-    return typeof part === 'number' ? part : null;
+    if (typeof part === 'number') return part;
+    const parsedInt = parseInt(raw, 10);
+    return isNaN(parsedInt) ? null : (parsedInt as BodyPart);
   },
 });
 

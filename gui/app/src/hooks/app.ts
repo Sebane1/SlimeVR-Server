@@ -11,7 +11,11 @@ import { useConfig } from './config';
 import { useBonesDataFeedConfig, useDataFeedConfig } from './datafeed-config';
 import { useWebsocketAPI } from './websocket-api';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { bonesAtom, datafeedAtom, devicesAtom } from '@/store/app-store';
+import {
+  bonesAtom,
+  datafeedAtom,
+  devicesAtom,
+} from '@/store/app-store';
 import { getSentryOrCompute, updateSentryContext } from '@/utils/sentry';
 import { fetchCurrentFirmwareRelease, FirmwareRelease } from './firmware-update';
 import { DEFAULT_LOCALE, LangContext } from '@/i18n/config';
@@ -23,8 +27,12 @@ export interface AppContext {
 }
 
 export function useProvideAppContext(): AppContext {
-  const { useRPCPacket, sendDataFeedPacket, useDataFeedPacket, isConnected } =
-    useWebsocketAPI();
+  const {
+    useRPCPacket,
+    sendDataFeedPacket,
+    useDataFeedPacket,
+    isConnected,
+  } = useWebsocketAPI();
   const { changeLocales } = useContext(LangContext);
   const { config } = useConfig();
   const { dataFeedConfig } = useDataFeedConfig();

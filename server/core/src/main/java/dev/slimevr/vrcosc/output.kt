@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import dev.slimevr.plugin.PluginManager
 import solarxr_protocol.datatypes.BodyPart
 import solarxr_protocol.rpc.RoutingOutput
 import solarxr_protocol.rpc.VRCOSCOutputState
@@ -35,6 +36,7 @@ class VRCOSCOutputBehaviour(
 	private val skeleton: Skeleton,
 	private val settings: Settings,
 	private val boneRouting: BoneRoutingManager,
+	private val pluginManager: PluginManager? = null,
 ) : VRCOSCBehaviour {
 	private class OutputRuntime {
 		var sender: OscSender? = null
@@ -148,7 +150,7 @@ class VRCOSCOutputBehaviour(
 
 		if (runtime.sendFailing && runtime.nextFrameRetryAt?.hasPassedNow() == false) return
 
-		val bundle = buildOutgoingBundle(bones, routedBones) ?: return
+		val bundle = buildOutgoingBundle(bones, routedBones, pluginManager) ?: return
 
 		try {
 			sender.send(bundle)

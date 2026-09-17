@@ -12,15 +12,15 @@ import { useChokerWarning } from './choker-warning';
 import { useWebsocketAPI } from './websocket-api';
 import { useConfig } from './config';
 import { playTapSetupSound } from '@/sounds/sounds';
-import { useAtomValue } from 'jotai';
-import { donglesAtom } from '@/store/app-store';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { donglesAtom, pluginBonesAtom } from '@/store/app-store';
 import { hoveredBodyPartAtom } from './tracker-drag';
 import { providePicker } from './tracker-picker';
 
 export type AssignmentMode = 'drag' | 'tap';
 
 export type Pending =
-  | { kind: 'part'; part: BodyPart }
+  | { kind: 'part'; part: BodyPart; label?: string }
   | { kind: 'tracker'; id: number }
   | null;
 
@@ -51,6 +51,7 @@ export function useTrackerAssignment(mode: AssignmentMode) {
   const [panelOpen, setPanelOpen] = useState(false);
 
   const dongles = useAtomValue(donglesAtom);
+  const setPluginBones = useSetAtom(pluginBonesAtom);
   const dragTarget = useAtomValue(hoveredBodyPartAtom);
 
   const armedPart = pending?.kind === 'part' ? pending.part : BodyPart.NONE;
@@ -77,21 +78,39 @@ export function useTrackerAssignment(mode: AssignmentMode) {
   };
 
   const moveTrackerToBodyPart = (trackerId: number, bodyPart: BodyPart) => {
-    const occupant = trackerByPart[bodyPart];
-    if (
-      bodyPart !== BodyPart.NONE &&
-      occupant &&
-      occupant.tracker.trackerId !== trackerId
-    ) {
-      sendAssign(
-        occupant.tracker.trackerId,
-        BodyPart.NONE,
-        occupant.tracker.info?.mountingOrientation ?? null
-      );
+    if (bodyPart >= BodyPart.HEAD + 100) {
+      setPluginBones((prev) => {
+        return prev.map((b, index) => {
+          const vPart = (BodyPart.HEAD + 100 + index) as BodyPart;
+          if (vPart === bodyPart) {
+            return { ...b, assignedTrackerId: trackerId };
+          }
+          if (b.assignedTrackerId === trackerId) {
+            return { ...b, assignedTrackerId: undefined };
+          }
+          return b;
+        });
+      });
+    } else {
+      const occupant = trackerByPart[bodyPart];
+      if (
+        bodyPart !== BodyPart.NONE &&
+        occupant &&
+        occupant.tracker.trackerId !== trackerId
+      ) {
+        sendAssign(
+          occupant.tracker.trackerId,
+          BodyPart.NONE,
+          occupant.tracker.info?.mountingOrientation ?? null
+        );
+      }
     }
 
     const moved = flatTrackers.find((td) => td.tracker.trackerId === trackerId);
-    sendAssign(trackerId, bodyPart, moved?.tracker.info?.mountingOrientation ?? null);
+    // Only send to server for real (non-plugin-virtual) body parts
+    if (bodyPart < BodyPart.HEAD + 100) {
+      sendAssign(trackerId, bodyPart, moved?.tracker.info?.mountingOrientation ?? null);
+    }
   };
 
   const { tryOpenChokerWarning, closeChokerWarning, shouldShowChokerWarn } =
@@ -108,12 +127,19 @@ export function useTrackerAssignment(mode: AssignmentMode) {
       },
     });
 
-  const armPart = (part: BodyPart) => {
+  const armedLabel = pending?.kind === 'part' ? pending.label : undefined;
+
+  const armPart = (part: BodyPart, label?: string) => {
     if (armedPart === part) {
       clearPending();
       return;
     }
-    tryOpenChokerWarning({ bodyPart: part });
+    if (label != null) {
+      setPending({ kind: 'part', part, label });
+      setPanelOpen(true);
+    } else {
+      tryOpenChokerWarning({ bodyPart: part });
+    }
   };
 
   const handleDropTracker = (trackerId: number, bodyPart: BodyPart) => {
@@ -121,13 +147,25 @@ export function useTrackerAssignment(mode: AssignmentMode) {
   };
 
   const unassignPart = (part: BodyPart) => {
-    const td = trackerByPart[part];
-    if (td) {
-      sendAssign(
-        td.tracker.trackerId,
-        BodyPart.NONE,
-        td.tracker.info?.mountingOrientation ?? null
-      );
+    if (part >= BodyPart.HEAD + 100) {
+      setPluginBones((prev) => {
+        return prev.map((b, index) => {
+          const vPart = (BodyPart.HEAD + 100 + index) as BodyPart;
+          if (vPart === part) {
+            return { ...b, assignedTrackerId: undefined };
+          }
+          return b;
+        });
+      });
+    } else {
+      const td = trackerByPart[part];
+      if (td) {
+        sendAssign(
+          td.tracker.trackerId,
+          BodyPart.NONE,
+          td.tracker.info?.mountingOrientation ?? null
+        );
+      }
     }
     if (armedPart === part) clearPending();
   };
@@ -137,7 +175,7 @@ export function useTrackerAssignment(mode: AssignmentMode) {
     clearPending();
   };
 
-  const selectPart = (role: BodyPart) => {
+  const selectPart = (role: BodyPart, label?: string) => {
     if (pendingTrackerId != null) {
       handleDropTracker(pendingTrackerId, role);
       return;
@@ -146,7 +184,7 @@ export function useTrackerAssignment(mode: AssignmentMode) {
       unassignPart(role);
       return;
     }
-    armPart(role);
+    armPart(role, label);
   };
 
   const selectTracker = (trackerId: number) => {
@@ -177,6 +215,7 @@ export function useTrackerAssignment(mode: AssignmentMode) {
     dongles,
     pending,
     armedPart,
+    armedLabel,
     pendingTrackerId,
     activePart,
     clearPending,

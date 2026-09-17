@@ -4,6 +4,7 @@ import dev.slimevr.osc.OscArg
 import dev.slimevr.osc.OscBundle
 import dev.slimevr.osc.OscContent
 import dev.slimevr.osc.OscMessage
+import dev.slimevr.plugin.PluginManager
 import dev.slimevr.skeleton.BoneState
 import dev.slimevr.skeleton.ComputedSkeleton
 import io.github.axisangles.ktmath.EulerOrder
@@ -29,6 +30,7 @@ val VRC_OSC_SUPPORTED_BONES: Set<BodyPart> = trackerIdsByBodyPart.keys
 internal fun buildOutgoingBundle(
 	bones: ComputedSkeleton,
 	routedBones: Set<BodyPart>,
+	pluginManager: PluginManager? = null,
 ): OscBundle? {
 	val messages = buildList<OscContent> {
 		for ((bodyPart, trackerId) in trackerIdsByBodyPart) {
@@ -58,6 +60,14 @@ internal fun buildOutgoingBundle(
 		addAll(buildToeMessages(bones))
 		addAll(buildTailMessages(bones))
 		addAll(buildBustMessages(bones))
+
+		// Plugin VRCOSC extensions
+		pluginManager?.let { pm ->
+			val pluginOscMessages = pm.buildVrcOscMessages()
+			for (msg in pluginOscMessages) {
+				add(OscContent.Message(msg))
+			}
+		}
 	}
 
 	return messages.takeIf { it.isNotEmpty() }?.let { OscBundle(1L, it) }

@@ -1184,6 +1184,7 @@ onboarding-assign_trackers-mobile-unassign = Unassign { $part }
 onboarding-assign_trackers-tab-body = Body
 onboarding-assign_trackers-tab-fingers = Fingers
 onboarding-assign_trackers-tab-toes = Toes
+onboarding-assign_trackers-tab-plugins = Plugins
 onboarding-assign_trackers-side-right = Right
 onboarding-assign_trackers-side-left = Left
 # Accessible name for the left/right pill radiogroup in the assignment panel header

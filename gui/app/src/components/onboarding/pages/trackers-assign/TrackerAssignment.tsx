@@ -83,7 +83,7 @@ function DragGhostLayer() {
 }
 
 function TapAssignModal() {
-  const { armedPart, clearPending } = useAssignment();
+  const { armedPart, armedLabel, clearPending } = useAssignment();
   const isOpen = armedPart !== BodyPart.NONE;
 
   return (
@@ -103,8 +103,10 @@ function TapAssignModal() {
             bold
             variant="section-title"
             color="text-accent-background-10"
-            id={'body_part-' + BodyPart[armedPart]}
-          />
+            id={armedLabel ? undefined : 'body_part-' + BodyPart[armedPart]}
+          >
+            {armedLabel}
+          </Typography>
         )}
         <Typography id="onboarding-assign_trackers-tap_modal-description" />
         <Button

@@ -133,13 +133,13 @@ export function useSuggestedBodyParts(): BodyPart[] {
     : getSuggestedBodyParts(connectedIMUTrackers.length);
 }
 
-export type PickerTab = 'body' | 'fingers' | 'toes';
+export type PickerTab = 'body' | 'fingers' | 'toes' | 'plugins';
 
 export type PickerTabSpec = {
   labelId: string;
   enabled: boolean;
   dotSize: { drag: number; tap: number };
-  view: { kind: 'body' } | { kind: 'extremity'; descriptor: ExtremityDescriptor };
+  view: { kind: 'body' } | { kind: 'extremity'; descriptor: ExtremityDescriptor } | { kind: 'plugins' };
 };
 
 export const PICKER_TABS: Record<PickerTab, PickerTabSpec> = {
@@ -161,9 +161,15 @@ export const PICKER_TABS: Record<PickerTab, PickerTabSpec> = {
     dotSize: { drag: 20, tap: 18 },
     view: { kind: 'extremity', descriptor: FOOT_EXTREMITY },
   },
+  plugins: {
+    labelId: 'onboarding-assign_trackers-tab-plugins',
+    enabled: true,
+    dotSize: { drag: 20, tap: 18 },
+    view: { kind: 'plugins' },
+  },
 };
 
-export const PICKER_TAB_ORDER: PickerTab[] = ['body', 'fingers', 'toes'];
+export const PICKER_TAB_ORDER: PickerTab[] = ['body', 'fingers', 'toes', 'plugins'];
 
 export function getPickerSelection(bodyPart?: BodyPart): {
   tab: PickerTab;

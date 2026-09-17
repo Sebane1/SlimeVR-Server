@@ -6,14 +6,24 @@ import { useDataFeedConfig } from './datafeed-config';
 import { Quaternion, Vector3 } from 'three';
 import { Vector3FromVec3fT } from '@/maths/vector3';
 import { useAtomValue } from 'jotai';
-import { trackerFromIdAtom } from '@/store/app-store';
+import { pluginBonesAtom, PluginBoneData, trackerFromIdAtom } from '@/store/app-store';
 
 export const getLocalizedTrackerName = (
   l10n: ReactLocalization,
-  info: TrackerInfoT | null
+  info: TrackerInfoT | null,
+  pluginBones?: PluginBoneData[],
+  trackerId?: number
 ) => {
   if (info?.customName) return info?.customName;
-  if (info?.bodyPart) return l10n.getString('body_part-' + BodyPart[info?.bodyPart]);
+  const tid = trackerId ?? (info as unknown as { trackerId?: number })?.trackerId;
+  if (pluginBones && tid != null) {
+    const bone = pluginBones.find((b) => b.assignedTrackerId === tid);
+    if (bone) return bone.name || bone.id;
+  }
+  if (info?.bodyPart) {
+    const partName = BodyPart[info?.bodyPart];
+    if (partName) return l10n.getString('body_part-' + partName);
+  }
   return info?.displayName || 'NONE';
 };
 
@@ -28,29 +38,60 @@ export const velocityGlowStyle = (velocity: number): CSSProperties => {
   };
 };
 
-export const useTracker = (tracker: TrackerDataT) => {
+export const useTracker = (tracker?: TrackerDataT | null) => {
   const { l10n } = useLocalization();
+  const pluginBones = useAtomValue(pluginBonesAtom);
 
   return {
     useName: () =>
-      useMemo(() => getLocalizedTrackerName(l10n, tracker.info), [tracker.info, l10n]),
+      useMemo(
+        () =>
+          tracker
+            ? getLocalizedTrackerName(
+                l10n,
+                tracker.info,
+                pluginBones,
+                tracker.trackerId
+              )
+            : '',
+        [tracker?.info, tracker?.trackerId, pluginBones, l10n]
+      ),
+    useBodyPartName: () =>
+      useMemo(() => {
+        if (!tracker) return '';
+        if (pluginBones && tracker.trackerId != null) {
+          const bone = pluginBones.find(
+            (b) => b.assignedTrackerId === tracker.trackerId
+          );
+          if (bone) return bone.name || bone.id;
+        }
+        const bodyPart = tracker.info?.bodyPart ?? BodyPart.NONE;
+        if (bodyPart !== BodyPart.NONE) {
+          const partName = BodyPart[bodyPart];
+          if (partName) return l10n.getString('body_part-' + partName);
+        }
+        return l10n.getString('body_part-NONE');
+      }, [tracker?.info?.bodyPart, tracker?.trackerId, pluginBones, l10n]),
     useRawRotationEulerDegrees: () =>
-      useMemo(() => QuaternionToEulerDegrees(tracker?.rotation), [tracker.rotation]),
+      useMemo(
+        () => tracker?.rotation && QuaternionToEulerDegrees(tracker.rotation),
+        [tracker?.rotation]
+      ),
     useRefAdjRotationEulerDegrees: () =>
       useMemo(
         () =>
           tracker?.rotationReferenceAdjusted &&
-          QuaternionToEulerDegrees(tracker?.rotationReferenceAdjusted),
-        [tracker.rotationReferenceAdjusted]
+          QuaternionToEulerDegrees(tracker.rotationReferenceAdjusted),
+        [tracker?.rotationReferenceAdjusted]
       ),
     useIdentAdjRotationEulerDegrees: () =>
       useMemo(
         () =>
           tracker?.rotationIdentityAdjusted &&
-          QuaternionToEulerDegrees(tracker?.rotationIdentityAdjusted),
-        [tracker.rotationIdentityAdjusted]
+          QuaternionToEulerDegrees(tracker.rotationIdentityAdjusted),
+        [tracker?.rotationIdentityAdjusted]
       ),
-    useVelocity: () => useVelocity(tracker),
+    useVelocity: () => useVelocity(tracker ?? undefined),
   };
 };
 

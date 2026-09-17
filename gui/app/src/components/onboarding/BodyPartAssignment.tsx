@@ -182,14 +182,19 @@ export function BodyPartAssignment(props: BodyPartAssignmentProps) {
     },
   };
 
-  return props.view.kind === 'body' ? (
-    <BodyAssignmentView {...(props as BodyAssignmentViewProps)} state={state} />
-  ) : (
-    <ExtremityAssignmentView
-      {...(props as ExtremityAssignmentViewProps)}
-      state={state}
-    />
-  );
+  if (props.view.kind === 'body') {
+    return <BodyAssignmentView {...(props as BodyAssignmentViewProps)} state={state} />;
+  }
+  if (props.view.kind === 'extremity') {
+    return (
+      <ExtremityAssignmentView
+        {...(props as ExtremityAssignmentViewProps)}
+        state={state}
+      />
+    );
+  }
+  // 'plugins' or unknown — never render extremity view
+  return null;
 }
 
 function BodyAssignmentView({

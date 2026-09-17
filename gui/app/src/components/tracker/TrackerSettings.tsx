@@ -34,8 +34,8 @@ import { TrackerCard } from './TrackerCard';
 import { Quaternion } from 'three';
 import { useAppContext } from '@/hooks/app';
 import { MagnetometerToggleSetting } from '@/components/settings/pages/components/MagnetometerToggleSetting';
-import { useSetAtom } from 'jotai';
-import { ignoredTrackersAtom } from '@/store/app-store';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { ignoredTrackersAtom, pluginBonesAtom } from '@/store/app-store';
 import { checkForUpdate } from '@/hooks/firmware-update';
 import { Tooltip } from '@/components/commons/Tooltip';
 
@@ -161,6 +161,7 @@ export function TrackerSettingsPage() {
         onClose={() => setSelectBodyPart(false)}
         onRoleSelected={onRoleSelected}
         bodyPart={tracker?.tracker.info?.bodyPart}
+        trackerId={tracker?.tracker.trackerId}
       />
       <MountingSelectionMenu
         bodyPart={tracker?.tracker.info?.bodyPart}
@@ -407,25 +408,7 @@ export function TrackerSettingsPage() {
               )}
             </Typography>
             <div className="flex justify-between bg-background-80 w-full p-3 rounded-lg">
-              <div className="flex gap-3 items-center fill-background-10">
-                {tracker?.tracker.info?.bodyPart !== BodyPart.NONE && (
-                  <BodyPartIcon bodyPart={tracker?.tracker.info?.bodyPart} />
-                )}
-                {tracker?.tracker.info?.bodyPart === BodyPart.NONE && (
-                  <WarningIcon className="fill-status-warning" />
-                )}
-                <Typography
-                  color={classNames({
-                    'text-status-warning':
-                      tracker?.tracker.info?.bodyPart === BodyPart.NONE,
-                  })}
-                >
-                  {l10n.getString(
-                    'body_part-' +
-                      BodyPart[tracker?.tracker.info?.bodyPart || BodyPart.NONE]
-                  )}
-                </Typography>
-              </div>
+              <PluginBoneAssignmentDisplay trackerId={tracker?.tracker.trackerId} bodyPart={tracker?.tracker.info?.bodyPart} />
               <div className="flex">
                 <Button
                   variant="secondary"
@@ -529,5 +512,45 @@ export function TrackerSettingsPage() {
         </div>
       </div>
     </form>
+  );
+}
+
+function PluginBoneAssignmentDisplay({
+  trackerId,
+  bodyPart,
+}: {
+  trackerId?: number;
+  bodyPart?: BodyPart;
+}) {
+  const { l10n } = useLocalization();
+  const pluginBones = useAtomValue(pluginBonesAtom);
+
+  const pluginBone =
+    trackerId != null
+      ? pluginBones.find((b) => b.assignedTrackerId === trackerId)
+      : undefined;
+
+  if (pluginBone) {
+    return (
+      <div className="flex gap-3 items-center fill-background-10">
+        <BodyPartIcon bodyPart={BodyPart.HEAD} />
+        <Typography>{pluginBone.name || pluginBone.id}</Typography>
+      </div>
+    );
+  }
+
+  const isUnassigned = bodyPart == null || bodyPart === BodyPart.NONE;
+  return (
+    <div className="flex gap-3 items-center fill-background-10">
+      {!isUnassigned && <BodyPartIcon bodyPart={bodyPart} />}
+      {isUnassigned && <WarningIcon className="fill-status-warning" />}
+      <Typography
+        color={classNames({ 'text-status-warning': isUnassigned })}
+      >
+        {l10n.getString(
+          'body_part-' + BodyPart[bodyPart || BodyPart.NONE]
+        )}
+      </Typography>
+    </div>
   );
 }

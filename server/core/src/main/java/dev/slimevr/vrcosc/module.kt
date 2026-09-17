@@ -103,7 +103,7 @@ class VRCOSCManager(
 	fun startObserving(appContext: AppContextProvider) {
 		val settings = appContext.config.settings
 		val behaviours = listOf(
-			VRCOSCOutputBehaviour(appContext.skeleton, settings, appContext.boneRouting),
+			VRCOSCOutputBehaviour(appContext.skeleton, settings, appContext.boneRouting, appContext.pluginManager),
 			VRCOSCInputBehaviour(appContext, settings),
 			VRCOSCOscQueryBehaviour(
 				settings,

@@ -10,6 +10,7 @@ import {
   ShowAllPartsToggle,
 } from '@/components/onboarding/BodyAssignment';
 import { BodyPartAssignment } from '@/components/onboarding/BodyPartAssignment';
+import { getTrackerName } from '@/hooks/tracker';
 import {
   ExtremitySideToggle,
   PickerTabs,
@@ -25,17 +26,21 @@ import {
   PickerContext,
   providePicker,
 } from '@/hooks/tracker-picker';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { flatTrackersAtom, pluginBonesAtom } from '@/store/app-store';
 
 export function SingleTrackerBodyAssignmentMenu({
   isOpen,
   onClose,
   onRoleSelected,
   bodyPart,
+  trackerId,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onRoleSelected: (role: BodyPart) => void;
   bodyPart?: BodyPart;
+  trackerId?: number;
 }) {
   const { l10n } = useLocalization();
   const { config } = useConfig();
@@ -202,6 +207,11 @@ export function SingleTrackerBodyAssignmentMenu({
                         dotClass={dotClass}
                         onRoleSelected={picker.selectPart}
                       />
+                    ) : view.kind === 'plugins' ? (
+                      <SingleTrackerPluginBonesView
+                        trackerId={trackerId}
+                        onAssigned={onClose}
+                      />
                     ) : (
                       <BodyPartAssignment
                         view={view}
@@ -258,5 +268,75 @@ export function SingleTrackerBodyAssignmentMenu({
         accept={() => closeChokerWarning(false)}
       />
     </>
+  );
+}
+
+function SingleTrackerPluginBonesView({
+  trackerId,
+  onAssigned,
+}: {
+  trackerId?: number;
+  onAssigned: () => void;
+}) {
+  const pluginBones = useAtomValue(pluginBonesAtom);
+  const setPluginBones = useSetAtom(pluginBonesAtom);
+  const flatTrackers = useAtomValue(flatTrackersAtom);
+
+  if (pluginBones.length === 0) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-8 text-center opacity-60">
+        <Typography>
+          No plugin bones registered. Start a plugin that registers custom target bones.
+        </Typography>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3 p-4 overflow-y-auto">
+      <Typography bold variant="section-title">
+        Plugin Target Bones
+      </Typography>
+      <div className="flex flex-wrap gap-3">
+        {pluginBones.map((bone, index) => {
+          const isAssigned = bone.assignedTrackerId === trackerId;
+          const assignedTd = bone.assignedTrackerId != null
+            ? flatTrackers.find((td) => td.tracker.trackerId === bone.assignedTrackerId)
+            : undefined;
+          return (
+            <button
+              key={bone.id}
+              type="button"
+              onClick={() => {
+                if (trackerId == null) return;
+                setPluginBones((prev) =>
+                  prev.map((b, i) => {
+                    if (i === index) return { ...b, assignedTrackerId: trackerId };
+                    if (b.assignedTrackerId === trackerId) return { ...b, assignedTrackerId: undefined };
+                    return b;
+                  })
+                );
+                onAssigned();
+              }}
+              className={classNames(
+                'flex flex-col control rounded-md relative overflow-hidden transition-colors duration-150 ease-linear',
+                'gap-1 px-2 py-1 text-left w-[88px] smol:w-[120px] sm:w-[150px]'
+              )}
+            >
+              <Typography bold>{bone.name || bone.id}</Typography>
+              {assignedTd ? (
+                <Typography variant="standard">
+                  {getTrackerName(assignedTd.tracker.info)}
+                </Typography>
+              ) : (
+                <Typography variant="standard" color="text-background-30">
+                  Unassigned
+                </Typography>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

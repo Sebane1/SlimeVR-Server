@@ -7,6 +7,7 @@ import dev.slimevr.firmware.FirmwareManager
 import dev.slimevr.heightcalibration.HeightCalibrationManager
 import dev.slimevr.keybind.KeybindManager
 import dev.slimevr.networkprofile.NetworkProfileManager
+import dev.slimevr.plugin.PluginManager
 import dev.slimevr.provisioning.ProvisioningManager
 import dev.slimevr.resets.ResetsManager
 import dev.slimevr.routing.BoneRoutingManager
@@ -51,6 +52,7 @@ interface AppContextProvider : Phase1ContextProvider {
 	val customOscOutputManager: CustomOscOutputManager
 	val resetsManager: ResetsManager
 	val tapDetectionManager: TapDetectionManager
+	val pluginManager: PluginManager get() = PluginManager()
 	fun startObserving()
 	suspend fun dispose()
 }
@@ -74,11 +76,13 @@ class AppContext(
 	override val bvhManager: BVHManager,
 	override val vmcManager: VMCManager,
 	override val vrcOscManager: VRCOSCManager,
-	override val customOscOutputManager: dev.slimevr.customosc.CustomOscOutputManager,
+	override val customOscOutputManager: CustomOscOutputManager,
 	override val resetsManager: ResetsManager,
 	override val tapDetectionManager: TapDetectionManager,
+	override val pluginManager: PluginManager = PluginManager(),
 ) : AppContextProvider {
 	override fun startObserving() {
+		pluginManager.loadPlugins()
 		keybindManager.startObserving(this)
 		skeleton.startObserving()
 		firmwareManager.startObserving()
@@ -97,6 +101,7 @@ class AppContext(
 	}
 
 	override suspend fun dispose() {
+		pluginManager.shutdown()
 		udpServer.dispose()
 	}
 }

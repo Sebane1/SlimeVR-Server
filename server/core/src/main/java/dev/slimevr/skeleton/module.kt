@@ -1,6 +1,8 @@
 package dev.slimevr.skeleton
 
+import dev.slimevr.AppContextProvider
 import dev.slimevr.Phase1ContextProvider
+import dev.slimevr.skeleton.inputprocessors.PluginInputProcessor
 import dev.slimevr.context.Behaviour
 import dev.slimevr.context.Context
 import dev.slimevr.skeleton.computedprocessors.VelocityComputedProcessor
@@ -232,6 +234,7 @@ class Skeleton(
 						BustInputProcessor(),
 						PosteriorDirectLinkInputProcessor(),
 						TailChainInputProcessor().also { resettableSkeletonProcessors.add(it) },
+						PluginInputProcessor((ctx as? AppContextProvider)?.pluginManager),
 						ConstraintInputProcessor(settings),
 					),
 					fkComputedProcessors = listOf(

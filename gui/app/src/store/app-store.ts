@@ -18,9 +18,22 @@ export interface FlatDeviceTracker {
   tracker: TrackerDataT;
 }
 
+export interface PluginBoneData {
+  id: string;
+  name: string;
+  parentBoneId: string;
+  tabName?: string;
+  position: { x: number; y: number; z: number };
+  rotation: { x: number; y: number; z: number; w: number };
+  modelUrl?: string;
+  assignedTrackerId?: number;
+}
+
 export const ignoredTrackersAtom = atom(new Set<string>());
 
 export const datafeedAtom = atom(new DataFeedUpdateT());
+
+export const pluginBonesAtom = atom<PluginBoneData[]>([]);
 
 export const bonesAtom = atom<BoneT[]>([]);
 
@@ -59,7 +72,8 @@ export type TrackerConnectionGroup = {
 
 export function groupTrackersByConnection(
   trackers: FlatDeviceTracker[],
-  dongles: DongleDataT[]
+  dongles: DongleDataT[],
+  pluginBones: PluginBoneData[] = []
 ): TrackerConnectionGroup[] {
   const dongleByDeviceId = new Map<number, DongleDataT>(
     dongles.flatMap((dongle) => dongle.devicesIds.map((id) => [id, dongle]))
@@ -83,6 +97,12 @@ export function groupTrackersByConnection(
     assigned: [],
     unassigned: [],
   };
+
+  const pluginAssignedTrackerIds = new Set(
+    pluginBones
+      .map((b) => b.assignedTrackerId)
+      .filter((id): id is number => id != null)
+  );
 
   const getGroup = (flatTracker: FlatDeviceTracker): TrackerConnectionGroup => {
     if (flatTracker.tracker.origin == DeviceOrigin.DRIVER) {
@@ -117,7 +137,10 @@ export function groupTrackersByConnection(
 
   for (const flatTracker of trackers) {
     const group = getGroup(flatTracker);
-    const isUnassigned = flatTracker.tracker.info?.bodyPart === BodyPart.NONE;
+    const isUnassigned =
+      (flatTracker.tracker.info?.bodyPart === BodyPart.NONE ||
+        flatTracker.tracker.info?.bodyPart == null) &&
+      !pluginAssignedTrackerIds.has(flatTracker.tracker.trackerId);
     const targetList = isUnassigned ? group.unassigned : group.assigned;
 
     targetList.push(flatTracker);
@@ -181,12 +204,40 @@ export const flatTrackersAtom = atom((get) => {
 
 export const assignedTrackersAtom = atom((get) => {
   const trackers = get(flatTrackersAtom);
-  return trackers.filter(({ tracker }) => tracker.info?.bodyPart !== BodyPart.NONE);
+  const pluginBones = get(pluginBonesAtom);
+  const pluginAssignedTrackerIds = new Set(
+    pluginBones
+      .map((b) => b.assignedTrackerId)
+      .filter((id): id is number => id != null)
+  );
+  return trackers.filter(
+    ({ tracker }) =>
+      (tracker.info?.bodyPart != null &&
+        tracker.info?.bodyPart !== BodyPart.NONE) ||
+      pluginAssignedTrackerIds.has(tracker.trackerId)
+  );
 });
 
-export const trackerByBodyPartAtom = atom((get) =>
-  groupTrackerByBodyPart(get(assignedTrackersAtom))
-);
+export const trackerByBodyPartAtom = atom((get) => {
+  const trackers = get(flatTrackersAtom);
+  const pluginBones = get(pluginBonesAtom);
+  const byPart: Partial<Record<BodyPart, FlatDeviceTracker>> = {};
+  trackers.forEach((td) => {
+    byPart[td.tracker.info?.bodyPart ?? BodyPart.NONE] = td;
+  });
+  pluginBones.forEach((bone, index) => {
+    if (bone.assignedTrackerId != null) {
+      const td = trackers.find(
+        (t) => t.tracker.trackerId === bone.assignedTrackerId
+      );
+      if (td) {
+        const vPart = (BodyPart.HEAD + 100 + index) as BodyPart;
+        byPart[vPart] = td;
+      }
+    }
+  });
+  return byPart;
+});
 
 export const assignedRolesAtom = selectAtom(
   assignedTrackersAtom,

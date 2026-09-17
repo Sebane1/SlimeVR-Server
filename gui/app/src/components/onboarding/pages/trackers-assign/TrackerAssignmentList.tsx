@@ -20,10 +20,12 @@ import {
   trackerDrag,
   useIsTrackerBeingDragged,
 } from '@/hooks/tracker-drag';
+import { useAtomValue } from 'jotai';
 import {
   FlatDeviceTracker,
   groupTrackersByConnection,
   groupTrackersByDevice,
+  pluginBonesAtom,
   TrackerConnectionGroup,
 } from '@/store/app-store';
 import { ShowAllPartsToggle } from '@/components/onboarding/BodyAssignment';
@@ -42,9 +44,10 @@ export function TrackerAssignmentList() {
     pendingTrackerId,
   } = useAssignment();
   const assignedCount = assignedTrackers.length;
+  const pluginBones = useAtomValue(pluginBonesAtom);
   const groups = useMemo(
-    () => groupTrackersByConnection(trackers, dongles),
-    [trackers, dongles]
+    () => groupTrackersByConnection(trackers, dongles, pluginBones),
+    [trackers, dongles, pluginBones]
   );
   const variant = state.alonePage ? 'primary' : 'tertiary';
 

@@ -35,7 +35,7 @@ import { useLocalization } from '@fluent/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Typography } from '@/components/commons/Typography';
 import { useAtomValue } from 'jotai';
-import { assignedTrackersAtom, bonesAtom } from '@/store/app-store';
+import { assignedTrackersAtom, bonesAtom, pluginBonesAtom, type PluginBoneData } from '@/store/app-store';
 import { Config, useConfig } from '@/hooks/config';
 import { Tween } from '@tweenjs/tween.js';
 import { EyeIcon } from '@/components/commons/icon/EyeIcon';
@@ -147,7 +147,8 @@ function createRadialFloorMesh(size = 8.0): Mesh {
 function initializePreview(
   canvas: HTMLCanvasElement,
   bones: Map<BodyPart, BoneT>,
-  initialStyle: Config['skeletonPreviewStyle']
+  initialStyle: Config['skeletonPreviewStyle'],
+  initialPluginBones: PluginBoneData[]
 ) {
   let style = initialStyle;
   let lastRenderTimeRef = 0;
@@ -187,6 +188,10 @@ function initializePreview(
 
   const skeletonGroup = new Group();
   let skeletonHelper = makeHelper(bones);
+  let currentPluginBones = initialPluginBones;
+  if (skeletonHelper instanceof BasedSkeletonMeshHelper) {
+    skeletonHelper.setPluginBones(currentPluginBones);
+  }
   skeletonGroup.add(skeletonHelper);
 
   scene.add(skeletonGroup);
@@ -218,6 +223,7 @@ function initializePreview(
     skeletonHelper = makeHelper(bones);
     if (skeletonHelper instanceof BasedSkeletonMeshHelper) {
       skeletonHelper.setProportions(deriveSkeletonProportions(bones));
+      skeletonHelper.setPluginBones(currentPluginBones);
     }
     skeletonGroup.add(skeletonHelper);
 
@@ -338,6 +344,12 @@ function initializePreview(
       }
     },
     updateTrackers,
+    setPluginBones: (pluginBones: PluginBoneData[]) => {
+      currentPluginBones = pluginBones;
+      if (skeletonHelper instanceof BasedSkeletonMeshHelper) {
+        skeletonHelper.setPluginBones(pluginBones);
+      }
+    },
     destroy: () => {
       cancelAnimationFrame(animationFrameId);
       skeletonHelper.dispose();
@@ -427,6 +439,7 @@ function SkeletonVisualizer({
   const resizeObserver = useRef(new ResizeObserver(([e]) => onResize(e)));
   const bonesList = useAtomValue(bonesAtom);
   const assignedTrackers = useAtomValue(assignedTrackersAtom);
+  const pluginBones = useAtomValue(pluginBonesAtom);
 
   const bones = useMemo(() => {
     return new Map(bonesList.map((b) => [b.bodyPart, b]));
@@ -477,6 +490,12 @@ function SkeletonVisualizer({
     context.updateTrackers(trackersByPart);
   }, [style, disabled]);
 
+  useEffect(() => {
+    const context = previewContext.current;
+    if (!context || disabled) return;
+    context.setPluginBones(pluginBones);
+  }, [pluginBones, disabled]);
+
   const onResize = (e: ResizeObserverEntry) => {
     const context = previewContext.current;
     if (!context || !containerRef.current || !canvasRef.current) return;
@@ -503,7 +522,12 @@ function SkeletonVisualizer({
       throw 'invalid state - no canvas or container';
     resizeObserver.current.observe(containerRef.current);
 
-    previewContext.current = initializePreview(canvasRef.current, bones, style);
+    previewContext.current = initializePreview(
+      canvasRef.current,
+      bones,
+      style,
+      pluginBones
+    );
     if (!config?.devSettings.fastDataFeed)
       previewContext.current.setFrameInterval(1000 / LOW_FRAMERATE);
 
