@@ -233,7 +233,7 @@ class Skeleton(
 						ToeActiveLinkInputProcessor(),
 						BustInputProcessor(),
 						PosteriorDirectLinkInputProcessor(),
-						TailChainInputProcessor().also { resettableSkeletonProcessors.add(it) },
+						TailChainInputProcessor(),
 						PluginInputProcessor((ctx as? AppContextProvider)?.pluginManager),
 						ConstraintInputProcessor(settings),
 					),
