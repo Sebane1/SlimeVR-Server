@@ -15,10 +15,9 @@ import {
   SkeletonRenderPart,
   TrackerPreviewData,
 } from './skeletonHelper';
-import { BodyPart, BoneT } from 'solarxr-protocol';
-import { QuaternionFromQuatT } from '@/maths/quaternion';
+import { BodyPart, BoneT, PluginBone } from 'solarxr-protocol';
+import type { QuaternionFromQuatT } from '@/maths/quaternion';
 import { Vector3FromVec3fT } from '@/maths/vector3';
-import type { PluginBoneData } from '@/store/app-store';
 import {
   BoneShapeConfig,
   ModelDimensions,
@@ -308,8 +307,8 @@ export class BasedSkeletonMeshHelper extends Object3D {
 
   private pluginNodes = new Map<string, Object3D>();
 
-  setPluginBones(pluginBones: PluginBoneData[]) {
-    const activeIds = new Set(pluginBones.map((b) => b.id));
+  setPluginBones(pluginBones: PluginBone[]) {
+    const activeIds = new Set(pluginBones.map((b) => b.id()));
 
     // Remove obsolete nodes
     for (const [id, node] of this.pluginNodes.entries()) {
@@ -321,11 +320,11 @@ export class BasedSkeletonMeshHelper extends Object3D {
 
     // Add or update nodes
     for (const boneData of pluginBones) {
-      let node = this.pluginNodes.get(boneData.id);
+      let node = this.pluginNodes.get(boneData.id());
       if (!node) {
         node = new Object3D();
         this.add(node);
-        this.pluginNodes.set(boneData.id, node);
+        this.pluginNodes.set(boneData.id(), node);
 
         const fallbackMesh = new Mesh(
           this.trackerMarkerGeometry,
@@ -334,7 +333,7 @@ export class BasedSkeletonMeshHelper extends Object3D {
         fallbackMesh.scale.set(3, 3, 3);
         node.add(fallbackMesh);
 
-        if (boneData.modelUrl) {
+        if (boneData.modelUrl()) {
           loadModel(boneData.modelUrl).then((scene) => {
             if (!scene || this.disposed) return;
             const model = scene.clone(true);
@@ -344,15 +343,15 @@ export class BasedSkeletonMeshHelper extends Object3D {
         }
       }
       node.position.set(
-        boneData.position?.x ?? 0,
-        boneData.position?.y ?? 0,
-        boneData.position?.z ?? 0
+        boneData.localPositionX(),
+        boneData.localPositionY(),
+        boneData.localPositionZ()
       );
       node.quaternion.set(
-        boneData.rotation?.x ?? 0,
-        boneData.rotation?.y ?? 0,
-        boneData.rotation?.z ?? 0,
-        boneData.rotation?.w ?? 1
+        boneData.localRotationX(),
+        boneData.localRotationY(),
+        boneData.localRotationZ(),
+        boneData.localRotationW() || 1
       );
       node.updateMatrix();
     }

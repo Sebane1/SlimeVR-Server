@@ -1,9 +1,9 @@
 package dev.slimevr.plugin
 
-import dev.slimevr.plugin.bone.PluginBone
 import dev.slimevr.plugin.extensions.InputProcessorExtension
 import dev.slimevr.plugin.extensions.VMCExtension
 import dev.slimevr.plugin.extensions.VRCOSCExtension
+import solarxr_protocol.rpc.PluginBoneRegistration
 
 interface SlimePlugin {
 	val id: String
@@ -15,7 +15,7 @@ interface SlimePlugin {
 	fun onDisable() {}
 	fun onTick() {}
 
-	fun getPluginBones(): List<PluginBone> = emptyList()
+	fun getPluginBoneRegistrations(): List<PluginBoneRegistration> = emptyList()
 	fun getInputProcessorExtensions(): List<InputProcessorExtension> = emptyList()
 	fun getVmcExtensions(): List<VMCExtension> = emptyList()
 	fun getVrcOscExtensions(): List<VRCOSCExtension> = emptyList()

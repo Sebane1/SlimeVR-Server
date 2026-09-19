@@ -14,7 +14,6 @@ import java.util.ServiceLoader
 class PluginManager {
 	private val logger = noCoLogger("PluginManager")
 	private val loadedPlugins = mutableListOf<SlimePlugin>()
-	val boneManager = PluginBoneManager()
 
 	fun loadPlugins(pluginsDir: File = File("plugins")) {
 		var dir = pluginsDir
@@ -46,7 +45,6 @@ class PluginManager {
 			try {
 				loadedPlugins.add(plugin)
 				plugin.onEnable()
-				boneManager.registerBones(plugin.getPluginBones())
 				println("[PluginManager] Successfully loaded plugin: ${plugin.name} v${plugin.version} by ${plugin.author}")
 				logger.info("Successfully loaded plugin: ${plugin.name} v${plugin.version} by ${plugin.author}")
 			} catch (e: Exception) {
@@ -65,7 +63,6 @@ class PluginManager {
 		try {
 			loadedPlugins.add(plugin)
 			plugin.onEnable()
-			boneManager.registerBones(plugin.getPluginBones())
 			logger.info("Manually registered plugin: ${plugin.name} v${plugin.version}")
 		} catch (e: Exception) {
 			logger.error("Failed to enable manually registered plugin ${plugin.name}", e)
@@ -81,10 +78,6 @@ class PluginManager {
 			null
 		}
 
-		if (computed != null) {
-			boneManager.updateWorldTransforms(computed)
-		}
-
 		for (plugin in loadedPlugins) {
 			try {
 				plugin.onTick()
@@ -95,43 +88,20 @@ class PluginManager {
 	}
 
 	fun processInputProcessorExtensions(mutableInputSkeleton: InputSkeleton, skeletonHeight: Float) {
-		val pluginBones = boneManager.getBones()
 		for (plugin in loadedPlugins) {
-			for (ext in plugin.getInputProcessorExtensions()) {
-				try {
-					ext.process(mutableInputSkeleton, skeletonHeight, pluginBones)
-				} catch (e: Exception) {
-					logger.error("Error running input processor extension for ${plugin.name}", e)
-				}
-			}
+			// Todo implement this again
 		}
 	}
 
 	fun dispatchVmc(sendVmc: (boneName: String, position: FloatArray, rotation: FloatArray) -> Unit) {
-		val pluginBones = boneManager.getBones()
 		for (plugin in loadedPlugins) {
-			for (ext in plugin.getVmcExtensions()) {
-				try {
-					ext.onVmcFrame(pluginBones, sendVmc)
-				} catch (e: Exception) {
-					logger.error("Error executing VMC extension for ${plugin.name}", e)
-				}
-			}
+			// Todo implement this again
 		}
 	}
 
 	fun buildVrcOscMessages(): List<OscMessage> {
 		val result = mutableListOf<OscMessage>()
-		val pluginBones = boneManager.getBones()
-		for (plugin in loadedPlugins) {
-			for (ext in plugin.getVrcOscExtensions()) {
-				try {
-					result.addAll(ext.buildOscMessages(pluginBones))
-				} catch (e: Exception) {
-					logger.error("Error executing VRCOSC extension for ${plugin.name}", e)
-				}
-			}
-		}
+		// Todo implement this again
 		return result
 	}
 
