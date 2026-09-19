@@ -23,7 +23,6 @@ import dev.slimevr.solarxr.rpc.InstalledInfoBehaviour
 import dev.slimevr.solarxr.rpc.KeybindsBehaviour
 import dev.slimevr.solarxr.rpc.KnownTrackersBehaviour
 import dev.slimevr.solarxr.rpc.MagBehaviour
-import dev.slimevr.solarxr.rpc.PluginBonesBehaviour
 import dev.slimevr.solarxr.rpc.ProvisioningBehaviour
 import dev.slimevr.solarxr.rpc.ResetsBehaviour
 import dev.slimevr.solarxr.rpc.SerialBehaviour
@@ -189,7 +188,6 @@ class SolarXRBridge(
 			add(VrcOscBehaviour(appContext.config.settings, appContext.vrcOscManager))
 			add(VmcBehaviour(appContext.config.settings, appContext.vmcManager))
 			add(CustomOscBehaviour(appContext.config.settings))
-			add(PluginBonesBehaviour(appContext.pluginManager))
 			add(HeightCalibrationBehaviour(appContext.heightCalibrationManager))
 			add(ProvisioningBehaviour(appContext.server, appContext.provisioningManager))
 			add(BoneRoutingBehaviour(appContext))
