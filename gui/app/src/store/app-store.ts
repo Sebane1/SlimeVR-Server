@@ -1,4 +1,7 @@
 import { atom } from 'jotai';
+import { useSetAtom } from 'jotai/utils';
+import { useAtomValue as _useAtomValue } from 'jotai';
+import { useEffect } from 'react';
 import {
   BodyPart,
   BoneT,
@@ -7,7 +10,7 @@ import {
   DeviceOrigin,
   DongleDataT,
   DongleStatus,
-  TrackerDataT,
+  GetPluginBonesResponse,
   TrackerStatus,
 } from 'solarxr-protocol';
 import { selectAtom } from 'jotai/utils';
@@ -34,6 +37,8 @@ export const ignoredTrackersAtom = atom(new Set<string>());
 export const datafeedAtom = atom(new DataFeedUpdateT());
 
 export const pluginBonesAtom = atom<PluginBoneData[]>([]);
+
+
 
 export const bonesAtom = atom<BoneT[]>([]);
 
@@ -238,6 +243,18 @@ export const trackerByBodyPartAtom = atom((get) => {
   });
   return byPart;
 });
+
+export function usePluginBones() {
+  const pluginBones = _useAtomValue(pluginBonesAtom);
+  
+  // Fetch plugin bones when connected
+  useEffect(() => {
+    console.log('[usePluginBones] Component mounted, checking connection...');
+    return () => console.log('[usePluginBones] Unmounting');
+  }, []);
+  
+  return pluginBones;
+}
 
 export const assignedRolesAtom = selectAtom(
   assignedTrackersAtom,

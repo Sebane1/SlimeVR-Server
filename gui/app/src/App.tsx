@@ -35,6 +35,7 @@ import { CustomOSCSettings } from './components/settings/pages/CustomOSCSettings
 import { MountingChoose } from './components/onboarding/pages/mounting/MountingChoose';
 import { VersionUpdateModal } from './components/VersionUpdateModal';
 import semver from 'semver';
+import { GetPluginBonesResponse, RpcMessage, BodyPart } from 'solarxr-protocol';
 import { useBreakpoint } from './hooks/breakpoint';
 import { VRModePage } from './components/vr-mode/VRModePage';
 import { InterfaceSettings } from './components/settings/pages/InterfaceSettings';
@@ -207,6 +208,14 @@ export default function App() {
   const [updateFound, setUpdateFound] = useState('');
   const electron = provideElectron();
 
+  // Initialize plugin bones setter atom with a proper setter function
+  import('@/store/app-store').then(({ pluginBonesAtom }) => {
+    const setter: ((bones: any[]) => void) | null = (bones: any[]) => {
+      console.log('[GUI] Received plugin bones from server:', bones);
+      return true;
+    };
+  });
+
   const fetchReleases = async () => {
     // don't show update stuff when on android
     if (window.__ANDROID__?.isThere()) return;
@@ -242,6 +251,33 @@ export default function App() {
   useEffect(() => {
     fetchReleases().catch((e) => error(e, 'failed to fetch releases'));
   }, []);
+
+  // Fetch plugin bones from server when connected
+  useEffect(() => {
+    if (websocketAPI.isConnected && websocketAPI.usePluginBonesResponse) {
+      console.log('[App] Connected to server, fetching plugin bones...');
+      
+      // Set up listener for GetPluginBonesResponse using the provided hook
+      const subscription = websocketAPI.usePluginBonesResponse((packet: PluginBoneData[]) => {
+        console.log(`[App] Received ${packet.length} plugin bones from server`);
+        
+        if (packet.length > 0) {
+          // Update the pluginBonesAtom
+          import('@/store/app-store').then(({ pluginBonesAtom }) => {
+            const setPluginBones = useSetAtom(pluginBonesAtom);
+            if (setPluginBones) {
+              console.log(`[App] Updating pluginBonesAtom with ${packet.length} bones`);
+              setPluginBones(packet);
+            } else {
+              console.warn('[App] Could not get pluginBones setter');
+            }
+          }).catch((err) => {
+            console.error('[App] Failed to update pluginBones:', err);
+          });
+        }
+      });
+    }
+  }, [websocketAPI.isConnected, websocketAPI.usePluginBonesResponse]);
 
   if (electron.isElectron) {
     useEffect(() => {

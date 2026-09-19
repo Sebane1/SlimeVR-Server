@@ -3,6 +3,8 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
   DataFeedMessage,
   DataFeedMessageHeaderT,
+  GetPluginBonesRequest,
+  GetPluginBonesRequestT,
   MessageBundle,
   MessageBundleT,
   RpcMessage,
@@ -25,6 +27,8 @@ export interface WebSocketApi {
 }
 
 export const WebSocketApiContext = createContext<WebSocketApi>(undefined as never);
+
+let pluginBonesSetter: ((bones: PluginBoneData[]) => void) | null = null;
 
 export type RPCPacketType = RpcMessageHeaderT['message'];
 export type DataFeedPacketType = DataFeedMessageHeaderT['message'];
@@ -166,30 +170,66 @@ export function useProvideWebsocketApi(): WebSocketApi {
     isFirstConnection,
     timedOut,
     reconnect,
+    
+    // Fetch plugin bones once when connected.
+    usePluginBonesResponse: (callback: (bones: PluginBoneData[]) => void) => {
+      const onGetPluginBones = (event: CustomEventInit<GetPluginBonesResponse>) => {
+        callback(event.detail);
+      };
+      
+      if (isConnected) {
+        // Send the request first
+        sendRPCPacket(RpcMessage.GetPluginBonesRequest, new GetPluginBonesRequestT());
+        
+        // Set up listener for GetPluginBonesResponse 
+        rpclistenerRef.current.addEventListener(
+          RpcMessage.GetPluginBonesResponse, 
+          onGetPluginBones
+        );
+      }
+      
+      return () => {
+        if (rpclistenerRef.current) {
+          rpclistenerRef.current.removeEventListener(
+            RpcMessage.GetPluginBonesResponse, 
+            onGetPluginBones
+          );
+        }
+      };
+    },
+    
     useDataFeedPacket: <T>(type: DataFeedMessage, callback: (packet: T) => void) => {
-      useEffect(() => {
-        const onEvent = (event: CustomEventInit) => {
-          callback(event.detail);
-        };
+      const onEvent = (event: CustomEventInit) => {
+        callback(event.detail);
+      };
+      
+      if (datafeedlistenerRef.current) {
         datafeedlistenerRef.current.addEventListener(DataFeedMessage[type], onEvent);
-        return () => {
+      }
+      
+      return () => {
+        if (datafeedlistenerRef.current) {
           datafeedlistenerRef.current.removeEventListener(
             DataFeedMessage[type],
             onEvent
           );
-        };
-      }, [callback, type]);
+        }
+      };
     },
     useRPCPacket: <T>(type: RpcMessage, callback: (packet: T) => void) => {
-      useEffect(() => {
-        const onEvent = (event: CustomEventInit) => {
-          callback(event.detail);
-        };
+      const onEvent = (event: CustomEventInit) => {
+        callback(event.detail);
+      };
+      
+      if (rpclistenerRef.current) {
         rpclistenerRef.current.addEventListener(RpcMessage[type], onEvent);
-        return () => {
+      }
+      
+      return () => {
+        if (rpclistenerRef.current) {
           rpclistenerRef.current.removeEventListener(RpcMessage[type], onEvent);
-        };
-      }, [callback, type]);
+        }
+      };
     },
     sendRPCPacket,
     sendDataFeedPacket,
