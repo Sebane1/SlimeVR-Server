@@ -15,8 +15,8 @@ interface SlimePlugin {
 	fun onDisable() {}
 	fun onTick() {}
 
-	fun getPluginBoneRegistrations(): List<PluginBoneRegistration> = emptyList()
-	fun getInputProcessorExtensions(): List<InputProcessorExtension> = emptyList()
-	fun getVmcExtensions(): List<VMCExtension> = emptyList()
-	fun getVrcOscExtensions(): List<VRCOSCExtension> = emptyList()
+	fun getPluginBoneRegistrations(): List<solarxr_protocol.rpc.PluginBoneRegistration> = emptyList()
+	fun getInputProcessorExtensions(): List<InputProcessorExtension>? = null
+	fun getVmcExtensions(): List<VMCExtension>? = null
+	fun getVrcOscExtensions(): List<VRCOSCExtension>? = null
 }

@@ -89,20 +89,41 @@ class PluginManager {
 
 	fun processInputProcessorExtensions(mutableInputSkeleton: InputSkeleton, skeletonHeight: Float) {
 		for (plugin in loadedPlugins) {
-			// Todo implement this again
+			val extensions = plugin.getInputProcessorExtensions() ?: emptyList()
+			for (extension in extensions) {
+				try {
+					extension.process(mutableInputSkeleton, skeletonHeight, plugin.getPluginBoneRegistrations())
+				} catch (e: Exception) {
+					logger.error("Error processing input extension for plugin ${plugin.name}", e)
+				}
+			}
 		}
 	}
 
 	fun dispatchVmc(sendVmc: (boneName: String, position: FloatArray, rotation: FloatArray) -> Unit) {
-		for (plugin in loadedPlugins) {
-			// Todo implement this again
+		val extensions = loadedPlugins.flatMap { it.getVmcExtensions() ?: emptyList() }
+		for (extension in extensions) {
+			try {
+				extension.onVmcFrame(loadedPlugins.flatMap { it.getPluginBoneRegistrations() ?: emptyList() }, sendVmc)
+			} catch (e: Exception) {
+				logger.error("Error dispatching VMC for plugin", e)
+			}
 		}
 	}
 
-	fun buildVrcOscMessages(): List<OscMessage> {
-		val result = mutableListOf<OscMessage>()
-		// Todo implement this again
-		return result
+	fun buildVrcOscMessages(): List<dev.slimevr.osc.OscMessage> {
+		val messages = mutableListOf<dev.slimevr.osc.OscMessage>()
+		for (plugin in loadedPlugins) {
+			val extensions = plugin.getVrcOscExtensions() ?: emptyList()
+			for (extension in extensions) {
+				try {
+					messages.addAll(extension.buildOscMessages(loadedPlugins.flatMap { it.getPluginBoneRegistrations() ?: emptyList() }))
+				} catch (e: Exception) {
+					logger.error("Error building OSC messages for plugin ${plugin.name}", e)
+				}
+			}
+		}
+		return messages.distinctBy { it.address }.sortedBy { it.address }
 	}
 
 	fun shutdown() {
