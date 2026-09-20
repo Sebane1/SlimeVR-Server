@@ -39,6 +39,8 @@ import dev.slimevr.solarxr.rpc.VmcBehaviour
 import dev.slimevr.solarxr.rpc.CustomOscBehaviour
 import dev.slimevr.solarxr.rpc.VrcBehaviour
 import dev.slimevr.solarxr.rpc.VrcOscBehaviour
+import dev.slimevr.plugin.PluginManager
+import dev.slimevr.solarxr.rpc.GetPluginBonesBehaviour
 import dev.slimevr.tracker.TrackerActions
 import dev.slimevr.util.timeSource
 import kotlinx.coroutines.CoroutineScope
@@ -173,6 +175,7 @@ class SolarXRBridge(
 		fun buildBehaviours(appContext: AppContextProvider): List<SolarXRBridgeBehaviour> = buildList {
 			add(DataFeedInitBehaviour(appContext.server, appContext.skeleton, timeSource))
 			add(SerialBehaviour(appContext.serialServer))
+
 			add(FirmwareBehaviour(appContext.server, appContext.firmwareManager))
 			appContext.vrcConfigManager?.let { vrc ->
 				add(
@@ -199,6 +202,7 @@ class SolarXRBridge(
 			add(AssignTrackerBehaviour(appContext.server))
 			add(DongleSettingsBehaviour(appContext.server))
 			add(TelemetryBehaviour(appContext.server))
+			add(GetPluginBonesBehaviour(appContext.pluginManager))
 			add(DriverHandshakeBehaviour(appContext))
 			add(DriverOutgoingTrackersBehaviour(appContext))
 			add(DriverIncomingTrackersBehaviour(appContext))

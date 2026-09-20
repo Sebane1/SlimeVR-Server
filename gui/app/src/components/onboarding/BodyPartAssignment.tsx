@@ -38,6 +38,9 @@ import {
   PartCardRenderer,
 } from './parts/PartCard';
 
+// Import plugin bone assignment component from same directory as this file
+import { PluginBoneAssignment } from '@/components/onboarding/PluginBoneAssignment';
+
 type BodySide = (typeof SIDES)[number];
 
 const LEFT_GROUPS = (side: BodySide): BodyPart[][] => [
@@ -105,6 +108,12 @@ export type BodyPartAssignmentProps =
   | BodyAssignmentViewProps
   | ExtremityAssignmentViewProps;
 
+// Extended props to include plugin bones for display
+type ExtendedBodyPartAssignmentProps = BodyPartAssignmentProps & { 
+  pluginBones?: PluginBoneData[];
+};
+
+
 type AssignmentRenderState = {
   assignedRoles: BodyPart[];
   trackerByPart: Record<number, FlatDeviceTracker | undefined>;
@@ -152,10 +161,14 @@ const defaultGroup =
     />
   );
 
-export function BodyPartAssignment(props: BodyPartAssignmentProps) {
+export function BodyPartAssignment(props: BodyPartAssignmentProps & { pluginBones?: PluginBoneData[] }) {
   const assignedRoles = useAtomValue(assignedRolesAtom);
   const trackerByPart = useAtomValue(trackerByBodyPartAtom);
   const suggestedBodyParts = useSuggestedBodyParts();
+  
+  // Get plugin bones for display in assignment UI - extract from props or store
+  const { pluginBones: propPluginBones } = props;
+  const pluginBones = propPluginBones || [];
   const {
     dotSize,
     highlightedRoles = [],
@@ -183,12 +196,13 @@ export function BodyPartAssignment(props: BodyPartAssignmentProps) {
   };
 
   if (props.view.kind === 'body') {
-    return <BodyAssignmentView {...(props as BodyAssignmentViewProps)} state={state} />;
+    return <BodyAssignmentView {...(props as BodyAssignmentViewProps)} pluginBones={pluginBones} state={state} />;
   }
   if (props.view.kind === 'extremity') {
     return (
       <ExtremityAssignmentView
         {...(props as ExtremityAssignmentViewProps)}
+        pluginBones={pluginBones}
         state={state}
       />
     );
@@ -204,7 +218,11 @@ function BodyAssignmentView({
   rolesWithErrors = {},
   onRoleSelected,
   renderCard,
-}: BodyAssignmentViewProps & { state: AssignmentRenderState }) {
+  pluginBones = [],
+}: BodyAssignmentViewProps & { 
+  state: AssignmentRenderState;
+  pluginBones?: PluginBoneData[];
+}) {
   const { assignedRoles, trackerByPart, suggestedBodyParts, interactions } =
     state;
   const left = +!mirror;
@@ -230,37 +248,60 @@ function BodyAssignmentView({
     [mirror, fillHeight]
   );
 
+  // Add plugin bones as virtual body parts for display
+  const virtualPluginParts = useMemo(() => {
+    return pluginBones.map((bone, index) => 
+      (BodyPart.HEAD + 200 + index) as BodyPart
+    );
+  }, [pluginBones]);
+
   const hasBodyPart = useCallback(
     (part: BodyPart) =>
       COMMONS.includes(part) ||
       suggestedBodyParts.includes(part) ||
-      assignedRoles.includes(part),
-    [suggestedBodyParts, assignedRoles]
+      assignedRoles.includes(part) ||
+      virtualPluginParts.includes(part),
+    [suggestedBodyParts, assignedRoles, virtualPluginParts]
   );
 
-  const column = (groups: BodyPart[][], direction: 'left' | 'right') => (
-    <div
-      className={classNames(
-        'flex flex-col justify-between h-full',
-        direction === 'right' && 'text-right'
-      )}
-    >
-      {groups.map((group, index) => (
-        <div key={index} className="flex flex-col gap-2">
-          {group.filter(hasBodyPart).map((role) => (
-            <Fragment key={role}>
-              {card({
-                role,
-                direction,
-                td: trackerByPart[role],
-                roleError: rolesWithErrors[role]?.label,
-              })}
-            </Fragment>
-          ))}
-        </div>
-      ))}
-    </div>
+  // Check if this is a plugin bone virtual part
+  const isPluginBone = useCallback(
+    (part: BodyPart) => {
+      return !COMMONS.includes(part) && suggestedBodyParts.every((p) => p !== part) && assignedRoles.every((r) => r !== part);
+    },
+    [COMMONS, suggestedBodyParts, assignedRoles]
   );
+
+  const column = (groups: BodyPart[][], direction: 'left' | 'right') => {
+    // Filter out plugin bone parts - they'll be rendered separately by PluginBoneAssignment
+    const regularParts = groups.map(group => 
+      group.filter((part) => !isPluginBone(part))
+    );
+
+    return (
+      <div
+        className={classNames(
+          'flex flex-col justify-between h-full',
+          direction === 'right' && 'text-right'
+        )}
+      >
+        {regularParts.map((group, index) => (
+          <div key={index} className="flex flex-col gap-2">
+            {group.filter(hasBodyPart).map((role) => (
+              <Fragment key={role}>
+                {card({
+                  role,
+                  direction,
+                  td: trackerByPart[role],
+                  roleError: rolesWithErrors[role]?.label,
+                })}
+              </Fragment>
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <BodyInteractions
@@ -284,7 +325,8 @@ function ExtremityAssignmentView({
   onRoleSelected,
   renderGroup,
   dotContent,
-}: ExtremityAssignmentViewProps & { state: AssignmentRenderState }) {
+  pluginBones = [],
+}: ExtremityAssignmentViewProps & { state: AssignmentRenderState; pluginBones?: PluginBoneData[] }) {
   const { trackerByPart, interactions } = state;
   const { descriptor } = view;
   const { digits, root } = descriptor.sides[side];

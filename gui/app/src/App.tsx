@@ -22,6 +22,7 @@ import { ErrorCollectingConsentPage } from './components/onboarding/pages/ErrorC
 import { AutomaticMountingPage } from './components/onboarding/pages/mounting/AutomaticMounting';
 import { ManualMountingPage } from './components/onboarding/pages/mounting/ManualMounting';
 import { TrackersAssignPage } from './components/onboarding/pages/trackers-assign/TrackerAssignment';
+import { PluginBoneAssignment } from './components/onboarding/PluginBoneAssignment';
 import { DonglePage } from './components/onboarding/pages/Dongle';
 import { ConfigContextProvider } from './components/providers/ConfigContext';
 import { VRCOSCSettings } from './components/settings/pages/VRCOSCSettings';
@@ -179,6 +180,7 @@ function Layout() {
             <Route path="add-trackers" element={<AddTrackersPage />} />
             <Route path="connect-trackers" element={<ConnectTrackersPage />} />
             <Route path="trackers-assign" element={<TrackersAssignPage />} />
+            <Route path="plugins" element={<PluginBoneAssignment view={{ kind: 'plugins' }} />} />
             <Route path="mounting/choose" element={<MountingChoose />} />
             <Route path="mounting/auto" element={<AutomaticMountingPage />} />
             <Route path="mounting/manual" element={<ManualMountingPage />} />

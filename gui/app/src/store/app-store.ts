@@ -22,19 +22,42 @@ export interface FlatDeviceTracker {
 }
 
 export interface PluginBoneData {
+  /** ID for this bone - used as key in maps and for identification */
   id: string;
+  
+  /** Display name shown to users in skeleton preview */
   name: string;
-  parentBoneId: string;
+  
+  /** Parent bone reference (e.g., "HEAD", "SPINE") or null for independent bone */
+  parentBoneId?: string;
+  
+  /** Optional tab grouping for organizing bones in UI */
   tabName?: string;
-  position: { x: number; y: number; z: number };
-  rotation: { x: number; y: number; z: number; w: number };
+  
+  /** URL to a 3D model file for this bone (optional GLB/GLTF) */
   modelUrl?: string;
+  
+  /** Assigned tracker ID if already assigned */
   assignedTrackerId?: number;
+}
+
+/** Get the next available virtual body part index starting from HEAD */
+export function getNextPluginBoneIndex(): BodyPart {
+  const pluginHead = BodyPart.HEAD + 200;
+  return pluginHead as BodyPart;
 }
 
 export const ignoredTrackersAtom = atom(new Set<string>());
 
 export const datafeedAtom = atom(new DataFeedUpdateT());
+
+let pluginBonesSetter: ((bones: PluginBoneData[]) => void) | null = null;
+
+export function setPluginBones(bones: PluginBoneData[]) {
+  if (pluginBonesSetter) {
+    pluginBonesSetter(bones);
+  }
+}
 
 export const pluginBonesAtom = atom<PluginBoneData[]>([]);
 
@@ -247,14 +270,27 @@ export const trackerByBodyPartAtom = atom((get) => {
 export function usePluginBones() {
   const pluginBones = _useAtomValue(pluginBonesAtom);
   
-  // Fetch plugin bones when connected
+  // Fetch plugin bones when connected - this is called by WebSocket API handler
   useEffect(() => {
     console.log('[usePluginBones] Component mounted, checking connection...');
+    
+    // Get the setter function and call it if available
+    // This will be populated by the websocket-api hook when a response arrives
+    const setter = (bones: PluginBoneData[]) => {
+      setPluginBones(bones);
+    };
+    
     return () => console.log('[usePluginBones] Unmounting');
   }, []);
   
   return pluginBones;
 }
+
+export const handleGetPluginBonesResponse = (bones: PluginBoneData[]) => {
+  console.log('[app-store] handleGetPluginBonesResponse called with', bones.length, 'plugin bone(s)');
+  
+  setPluginBones(bones);
+};
 
 export const assignedRolesAtom = selectAtom(
   assignedTrackersAtom,

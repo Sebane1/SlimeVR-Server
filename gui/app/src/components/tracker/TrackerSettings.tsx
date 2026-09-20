@@ -32,10 +32,13 @@ import { IMUVisualizerWidget } from '@/components/widgets/IMUVisualizerWidget';
 import { SingleTrackerBodyAssignmentMenu } from './SingleTrackerBodyAssignmentMenu';
 import { TrackerCard } from './TrackerCard';
 import { Quaternion } from 'three';
+
+// Import plugin bone assignment component for displaying plugin bones in tracker settings
+import { PluginBoneAssignment, } from '@/components/onboarding/PluginBoneAssignment';
 import { useAppContext } from '@/hooks/app';
 import { MagnetometerToggleSetting } from '@/components/settings/pages/components/MagnetometerToggleSetting';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { ignoredTrackersAtom, pluginBonesAtom } from '@/store/app-store';
+import { ignoredTrackersAtom } from '@/store/app-store';
 import { checkForUpdate } from '@/hooks/firmware-update';
 import { Tooltip } from '@/components/commons/Tooltip';
 
@@ -518,16 +521,21 @@ export function TrackerSettingsPage() {
 function PluginBoneAssignmentDisplay({
   trackerId,
   bodyPart,
+  pluginBones = [],
 }: {
   trackerId?: number;
   bodyPart?: BodyPart;
+  pluginBones?: import('@/store/app-store').PluginBoneData[];
 }) {
   const { l10n } = useLocalization();
-  const pluginBones = useAtomValue(pluginBonesAtom);
+
+  // Use the passed pluginBones prop instead of reading from store directly
+  // This ensures consistency with how other components receive plugin bone data
+  const pluginBoneData: import('@/store/app-store').PluginBoneData[] = pluginBones;
 
   const pluginBone =
     trackerId != null
-      ? pluginBones.find((b) => b.assignedTrackerId === trackerId)
+      ? pluginBoneData.find((b) => b.assignedTrackerId === trackerId)
       : undefined;
 
   if (pluginBone) {

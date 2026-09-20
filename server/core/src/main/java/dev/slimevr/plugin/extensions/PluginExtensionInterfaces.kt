@@ -2,7 +2,6 @@ package dev.slimevr.plugin.extensions
 
 import dev.slimevr.osc.OscMessage
 import dev.slimevr.skeleton.InputSkeleton
-import dev.slimevr.skeleton.Skeleton
 import solarxr_protocol.rpc.PluginBoneRegistration
 
 fun interface InputProcessorExtension {

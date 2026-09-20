@@ -6,9 +6,11 @@ import { CompareIcon } from '@/components/commons/icon/CompareIcon';
 import { TogglePill, TogglePillOption } from '@/components/commons/TogglePill';
 import {
   BodyAssignmentViewProps,
+  ExtendedBodyPartAssignmentProps,
   BodyPartAssignment,
 } from './BodyPartAssignment';
 
+// Removed unused import - PluginBoneAssignment is imported where needed in the UI
 export function ShowAllPartsToggle({ compact }: { compact?: boolean }) {
   const { l10n } = useLocalization();
   const { config, setConfig } = useConfig();
@@ -66,11 +68,13 @@ export function MirrorLegend({ compact }: { compact?: boolean }) {
 }
 
 export function BodyAssignment({
+  pluginBones = [],
   ...props
-}: Omit<BodyAssignmentViewProps, 'view'>) {
+}: Omit<ExtendedBodyPartAssignmentProps, 'view'>) {
   return (
     <BodyPartAssignment
       {...props}
+      pluginBones={pluginBones}
       view={{
         kind: 'body',
       }}

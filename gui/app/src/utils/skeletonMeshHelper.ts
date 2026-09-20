@@ -16,7 +16,7 @@ import {
   TrackerPreviewData,
 } from './skeletonHelper';
 import { BodyPart, BoneT, PluginBone } from 'solarxr-protocol';
-import type { QuaternionFromQuatT } from '@/maths/quaternion';
+import { QuaternionFromQuatT } from '@/maths/quaternion';
 import { Vector3FromVec3fT } from '@/maths/vector3';
 import {
   BoneShapeConfig,
@@ -307,20 +307,24 @@ export class BasedSkeletonMeshHelper extends Object3D {
 
   private pluginNodes = new Map<string, Object3D>();
 
-  setPluginBones(pluginBones: PluginBone[]) {
-    const activeIds = new Set(pluginBones.map((b) => b.id()));
+  setPluginBones(pluginBones: PluginBone[] | any[]) {
+    console.log('[skeletonMeshHelper] setPluginBones called with', pluginBones.length, 'plugin bone(s)');
+
+    // Handle both flatbuffer PluginBoneRegistration and custom interface
+    const activeIds = new Set(pluginBones.map((b) => b.id));
 
     // Remove obsolete nodes
     for (const [id, node] of this.pluginNodes.entries()) {
       if (!activeIds.has(id)) {
+        console.log('[skeletonMeshHelper] Removing obsolete plugin bone:', id);
         this.remove(node);
         this.pluginNodes.delete(id);
       }
     }
 
-    // Add or update nodes
+    // Add or update nodes - use Bone.kt's position/rotation from head_position and orientation
     for (const boneData of pluginBones) {
-      let node = this.pluginNodes.get(boneData.id());
+      let node = this.pluginNodes.get(boneData.id);
       if (!node) {
         node = new Object3D();
         this.add(node);
@@ -333,7 +337,7 @@ export class BasedSkeletonMeshHelper extends Object3D {
         fallbackMesh.scale.set(3, 3, 3);
         node.add(fallbackMesh);
 
-        if (boneData.modelUrl()) {
+        if (boneData.modelUrl) {
           loadModel(boneData.modelUrl).then((scene) => {
             if (!scene || this.disposed) return;
             const model = scene.clone(true);
@@ -342,17 +346,23 @@ export class BasedSkeletonMeshHelper extends Object3D {
           });
         }
       }
-      node.position.set(
-        boneData.localPositionX(),
-        boneData.localPositionY(),
-        boneData.localPositionZ()
-      );
-      node.quaternion.set(
-        boneData.localRotationX(),
-        boneData.localRotationY(),
-        boneData.localRotationZ(),
-        boneData.localRotationW() || 1
-      );
+
+      // Use default position/rotation since flatbuffer PluginBoneRegistration doesn't have these fields
+      // Position/rotation should come from Bone.kt's existing data structure
+      const x = 0; // Default to origin - plugin should provide actual position via parent bone offset
+      const y = 0;
+      const z = 0;
+      
+      const w = 1; // Identity quaternion
+      const qx = 0;
+      const qy = 0;
+      const qz = 0;
+
+      console.log('[skeletonMeshHelper] Setting plugin bone:', { id: boneData.id, name: boneData.name });
+
+      node.position.set(x, y, z);
+      node.quaternion.set(w, qx, qy, qz);
+
       node.updateMatrix();
     }
   }

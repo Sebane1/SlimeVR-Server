@@ -441,6 +441,28 @@ function SkeletonVisualizer({
   const assignedTrackers = useAtomValue(assignedTrackersAtom);
   const pluginBones = useAtomValue(pluginBonesAtom);
 
+  // Convert plugin bones to the format expected by initializePreview
+  const pluginBonesData = useMemo(() => {
+    return pluginBones.map((pb: PluginBoneData) => ({
+      id: () => pb.id,
+      name: () => pb.name,
+      parentBoneId: () => pb.parentBoneId,
+      tabName: () => pb.tabName || 'General',
+      position: {
+        x: pb.position.x,
+        y: pb.position.y,
+        z: pb.position.z,
+      },
+      rotation: {
+        x: pb.rotation.x,
+        y: pb.rotation.y,
+        z: pb.rotation.z,
+        w: pb.rotation.w,
+      },
+      modelUrl: () => pb.modelUrl || null,
+    }));
+  }, [pluginBones]);
+
   const bones = useMemo(() => {
     return new Map(bonesList.map((b) => [b.bodyPart, b]));
   }, [bonesList]);
@@ -494,6 +516,9 @@ function SkeletonVisualizer({
     const context = previewContext.current;
     if (!context || disabled) return;
     context.setPluginBones(pluginBones);
+    
+    // Log plugin bone updates for debugging
+    console.log('[SkeletonVisualizer] Plugin bones updated:', pluginBones.length, 'bones loaded');
   }, [pluginBones, disabled]);
 
   const onResize = (e: ResizeObserverEntry) => {
@@ -522,12 +547,32 @@ function SkeletonVisualizer({
       throw 'invalid state - no canvas or container';
     resizeObserver.current.observe(containerRef.current);
 
+    const pluginBonesData = pluginBones.map((pb: PluginBoneData) => ({
+      id: () => pb.id,
+      name: () => pb.name,
+      parentBoneId: () => pb.parentBoneId,
+      tabName: () => pb.tabName || 'General',
+      position: {
+        x: pb.position.x,
+        y: pb.position.y,
+        z: pb.position.z,
+      },
+      rotation: {
+        x: pb.rotation.x,
+        y: pb.rotation.y,
+        z: pb.rotation.z,
+        w: pb.rotation.w,
+      },
+      modelUrl: () => pb.modelUrl || null,
+    }));
+
     previewContext.current = initializePreview(
       canvasRef.current,
       bones,
       style,
-      pluginBones
+      pluginBonesData as any
     );
+    
     if (!config?.devSettings.fastDataFeed)
       previewContext.current.setFrameInterval(1000 / LOW_FRAMERATE);
 

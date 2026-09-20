@@ -45,8 +45,14 @@ class PluginManager {
 			try {
 				loadedPlugins.add(plugin)
 				plugin.onEnable()
+				val boneCount = plugin.getPluginBoneRegistrations().size
 				println("[PluginManager] Successfully loaded plugin: ${plugin.name} v${plugin.version} by ${plugin.author}")
-				logger.info("Successfully loaded plugin: ${plugin.name} v${plugin.version} by ${plugin.author}")
+				if (boneCount > 0) {
+					logger.info("Plugin '${plugin.name}' registered $boneCount bone(s)")
+				} else {
+					println("[PluginManager] Plugin '${plugin.name}' has no bones registered")
+				}
+				logger.info("Successfully loaded plugin: ${plugin.name} v${plugin.version}")
 			} catch (e: Exception) {
 				println("[PluginManager] Failed to enable plugin ${plugin.name}: ${e.message}")
 				logger.error("Failed to enable plugin ${plugin.name}", e)
@@ -59,12 +65,17 @@ class PluginManager {
 		loadPlugins(pluginsDir)
 	}
 
-	fun registerPlugin(plugin: SlimePlugin) {
-		try {
-			loadedPlugins.add(plugin)
-			plugin.onEnable()
-			logger.info("Manually registered plugin: ${plugin.name} v${plugin.version}")
-		} catch (e: Exception) {
+		fun registerPlugin(plugin: SlimePlugin) {
+			try {
+				loadedPlugins.add(plugin)
+				plugin.onEnable()
+				val boneCount = plugin.getPluginBoneRegistrations().size
+				if (boneCount > 0) {
+					logger.info("Manually registered plugin '${plugin.name}' v${plugin.version} with $boneCount bone(s)")
+				} else {
+					println("[PluginManager] Manually registered plugin '${plugin.name}' - no bones")
+				}
+			} catch (e: Exception) {
 			logger.error("Failed to enable manually registered plugin ${plugin.name}", e)
 		}
 	}

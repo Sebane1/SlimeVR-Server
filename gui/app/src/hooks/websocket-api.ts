@@ -173,15 +173,22 @@ export function useProvideWebsocketApi(): WebSocketApi {
     
     // Fetch plugin bones once when connected.
     usePluginBonesResponse: (callback: (bones: PluginBoneData[]) => void) => {
-      const onGetPluginBones = (event: CustomEventInit<GetPluginBonesResponse>) => {
+      const onGetPluginBones = (event: CustomEventInit<any>) => {
+        console.log('[websocket-api] Received GetPluginBonesResponse:', event.detail);
+        
         callback(event.detail);
+        
+        // Also update the store so GUI components can display plugin bones
+        handleGetPluginBonesResponse?.(event.detail);
       };
       
       if (isConnected) {
+        console.log('[websocket-api] Sending GetPluginBonesRequest...');
+        
         // Send the request first
         sendRPCPacket(RpcMessage.GetPluginBonesRequest, new GetPluginBonesRequestT());
         
-        // Set up listener for GetPluginBonesResponse 
+        // Set up listener for GetPluginBonesResponse - use typed enum from flatbuffer types
         rpclistenerRef.current.addEventListener(
           RpcMessage.GetPluginBonesResponse, 
           onGetPluginBones
@@ -190,6 +197,7 @@ export function useProvideWebsocketApi(): WebSocketApi {
       
       return () => {
         if (rpclistenerRef.current) {
+          console.log('[websocket-api] Removing GetPluginBonesResponse listener...');
           rpclistenerRef.current.removeEventListener(
             RpcMessage.GetPluginBonesResponse, 
             onGetPluginBones
