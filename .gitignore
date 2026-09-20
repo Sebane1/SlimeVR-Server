@@ -59,3 +59,4 @@ vrconfig.yml.tmp
 .bin/
 CLAUDE.md
 *.jar
+server/desktop/plugins
